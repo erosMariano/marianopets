@@ -1,10 +1,7 @@
-import React from "react";
-
 import localFont from "next/font/local";
 const myFont = localFont({ src: "../fonts/MADE_Gentle.otf" });
-
-import Arrow from "../../../assets/images/icons/arrow-prev.svg";
 import Depoimento1 from "../../../assets/images/depoimento1.png";
+import Arrow from "../../../assets/images/icons/arrow-prev.svg";
 
 import Image from "next/image";
 export function Depoimentos() {
