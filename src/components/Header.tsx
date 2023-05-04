@@ -34,12 +34,11 @@ export function Header() {
         <div className="flex items-center gap-10 ">
           <Image
             src={Logo}
-            width={303}
-            height={54.08}
             alt="Logo Mariano Pets"
+            className="w-[200px] lg:w-[303px]"
           />
 
-          <nav>
+          <nav className="hidden lg:block">
             <ul className="flex gap-9">
               <li>
                 <a href="" className="font-bold text-base text-dark-blue">
@@ -60,7 +59,7 @@ export function Header() {
           </nav>
         </div>
 
-        <button className="flex items-center bg-orange-400 px-6 py-3 gap-3 rounded-full text-white font-bold">
+        <button className="flex items-center bg-orange-400 px-4 py-2 lg:px-6 lg:text-base text-sm lg:py-3 gap-3 rounded-full text-white font-bold">
           Login{" "}
           <Image src={IconLogin} width={20} height={20} alt="Icon login" />
         </button>

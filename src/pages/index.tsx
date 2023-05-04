@@ -13,7 +13,7 @@ export default function Home() {
       <NosAjudar />
       <NossaTarefa />
       <Adote />
-      <Depoimentos />
+      {/*<Depoimentos /> */}
     </main>
   );
 }

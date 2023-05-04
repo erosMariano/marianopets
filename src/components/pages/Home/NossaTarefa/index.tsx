@@ -4,16 +4,14 @@ import BirdImage from "../../../../assets/images/passaro.png";
 import { ItemTarefa } from "./ItemTarefa";
 const myFont = localFont({ src: "../../fonts/MADE_Gentle.otf" });
 
-
 export function NossaTarefa() {
   return (
-    <section className="mt-20">
-      <div className="max-w-[1312px] mx-auto px-4 flex justify-between gap-4">
-
-        <div className="max-w-[619px]">
-        <h2 className={`${myFont.className} mb-6 text-4xl text-dark-text`}>
-          Nossa tarefa
-        </h2>
+    <section className="xl:mt-20">
+      <div className="flex-col flex xl:flex-row max-w-[1312px] mx-auto px-4 align-cen justify-between gap-11">
+        <div className="flex-1">
+          <h2 className={`${myFont.className} mb-6 text-4xl text-dark-text`}>
+            Nossa tarefa
+          </h2>
           <h3 className="mb-6 text-xl font-semibold text-light-text">
             Buscamos facilitar o encontro de animais que estão sendo doados e
             precisam de um lar.
@@ -36,10 +34,10 @@ export function NossaTarefa() {
           </ul>
         </div>
 
-        <Image src={BirdImage} alt="Pássaro image"/>
+        <div>
+          <Image src={BirdImage} alt="Pássaro image" className="h-fit mx-auto xl:mr-auto" />
+        </div>
       </div>
     </section>
   );
 }
-
-
