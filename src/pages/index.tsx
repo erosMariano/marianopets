@@ -1,3 +1,4 @@
+import { Adote } from "@/components/pages/Home/Adote";
 import { Hero } from "@/components/pages/Home/Hero";
 import { NosAjudar } from "@/components/pages/Home/NosAjudar";
 import { NossaTarefa } from "@/components/pages/Home/NossaTarefa";
@@ -10,6 +11,7 @@ export default function Home() {
       <Hero />
       <NosAjudar />
       <NossaTarefa />
+      <Adote />
     </main>
   );
 }
