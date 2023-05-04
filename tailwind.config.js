@@ -15,7 +15,8 @@ module.exports = {
       colors: {
         "dark-blue": "#0F012F",
         "bg-home": "#FFFAF5",
-        'light-text': '#6D5D7F'
+        'light-text': '#6D5D7F',
+        'dark-text': '#19053C'
       },
     },
   },

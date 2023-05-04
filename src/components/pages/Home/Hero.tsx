@@ -28,7 +28,7 @@ export function Hero() {
         <Image src={PataIcon} alt="" className="absolute right-[150px] bottom-9 rotate-[-50deg]" />
         <div>
           <h1
-            className={`${myFont.className} text-8xl text-dark-blue mb-6 max-w-[660px]`}
+            className={`${myFont.className} text-8xl text-dark-text mb-6 max-w-[660px]`}
           >
             Encha sua casa de amor
           </h1>
