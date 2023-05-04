@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import Logo from "../assets/images/logo.svg";
 import IconLogin from "../assets/images/icon-login.svg";
 import { Inter } from "next/font/google";
-
 const inter = Inter({ subsets: ["latin"] });
 
 export function Header() {
@@ -28,8 +27,8 @@ export function Header() {
   return (
     <header
       className={`flex items-center transition-all ${inter.className} ${
-        activeHeader ? "bg-red-200" : "transparent"
-      } sticky top-0 py-4`}
+        activeHeader ? "bg-white shadow-sm" : "transparent"
+      } sticky top-0 py-4 z-10`}
     >
       <div className="flex items-center justify-between w-full max-w-[1312px] mx-auto px-4">
         <div className="flex items-center gap-10 ">
