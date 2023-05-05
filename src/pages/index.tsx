@@ -4,16 +4,23 @@ import { Hero } from "@/components/pages/Home/Hero";
 import { NosAjudar } from "@/components/pages/Home/NosAjudar";
 import { NossaTarefa } from "@/components/pages/Home/NossaTarefa";
 import { Inter } from "next/font/google";
+import Head from "next/head";
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
   return (
-    <main className={inter.className}>
-      <Hero />
-      <NosAjudar />
-      <NossaTarefa />
-      <Adote />
-      {/*<Depoimentos /> */}
-    </main>
+    <>
+    <Head>
+      <title>Mariano Pets - Encontre seu companheiro perfeito para adoção</title>
+      <meta name="description" content="Encontre seu companheiro perfeito para adoção no nosso site de adoção de animais. Temos cães, gatos e outros animais em busca de um lar amoroso. Visite-nos hoje para encontrar o amigo peludo ideal!" />
+    </Head>
+      <main className={inter.className}>
+        <Hero />
+        <NosAjudar />
+        <NossaTarefa />
+        <Adote />
+        <Depoimentos />
+      </main>
+    </>
   );
 }
