@@ -21,7 +21,7 @@ export function CardAdote({
       <div className="absolute flex items-center flex-col">
         <h3
           className={`${myFont.className} ${
-            isSmall ? "text-2xl" : "text-4xl"
+            isSmall ? "text-2xl lg:text-2xl" : "text-2xl lg:text-4xl"
           } mb-4 text-white`}
         >
           {title}
@@ -29,7 +29,7 @@ export function CardAdote({
         <Link
           href={`${url}`}
           className={`transition border rounded border-white font-bold hover:bg-white hover:text-dark-text flex items-center justify-center text-white ${
-            isSmall ? "w-40 h-10" : "w-52 h-12"
+            isSmall ? "w-40 h-10" : "w-40 h-10 lg:w-52 lg:h-12"
           }`}
         >
           Ver Lista

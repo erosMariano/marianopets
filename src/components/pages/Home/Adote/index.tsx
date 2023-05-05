@@ -59,12 +59,12 @@ export function Adote() {
   return (
     <section className="mt-20">
       <div className="flex max-w-[1312px] mx-auto px-4 flex-col">
-        <h2 className={`${myFont.className} text-4xl mb-14 text-dark-text`}>
+        <h2 className={`${myFont.className} text-4xl mb-6 lg:mb-14 text-dark-text`}>
           Adote um pet
         </h2>
 
         <div className="flex flex-col gap-5">
-          <div className="flex gap-5">
+          <div className="flex flex-col md:flex-row gap-5">
             {adoteAnimalsContent.slice(0, 2).map((card) => {
               const data = {
                 altImage: card.altImage,
@@ -76,16 +76,30 @@ export function Adote() {
             })}
           </div>
 
-          <div className="flex gap-5">
-            {adoteAnimalsContent.slice(2).map((card) => {
-              const data = {
-                altImage: card.altImage,
-                image: card.image,
-                title: card.title,
-                url: card.url,
-              };
-              return <CardAdote animalInfo={data} isSmall key={card.title} />;
-            })}
+          <div className="flex-col lg:flex-row lg:flex gap-5">
+            <div className="flex gap-5 flex-col md:flex-row">
+              {adoteAnimalsContent.slice(2, 4).map((card) => {
+                const data = {
+                  altImage: card.altImage,
+                  image: card.image,
+                  title: card.title,
+                  url: card.url,
+                };
+                return <CardAdote animalInfo={data} isSmall key={card.title} />;
+              })}
+            </div>
+
+            <div className="flex gap-5 mt-5 flex-col md:flex-row">
+              {adoteAnimalsContent.slice(4).map((card) => {
+                const data = {
+                  altImage: card.altImage,
+                  image: card.image,
+                  title: card.title,
+                  url: card.url,
+                };
+                return <CardAdote animalInfo={data} isSmall key={card.title} />;
+              })}
+            </div>
           </div>
         </div>
       </div>

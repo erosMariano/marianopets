@@ -8,13 +8,13 @@ export function Depoimentos() {
   return (
     <section className="mt-20">
       <div className="max-w-[1312px] mx-auto px-4">
-        <h2 className={`${myFont.className} text-4xl mb-14 text-dark-text`}>
+        <h2 className={`${myFont.className} text-4xl mb-10 md:mb-14 text-dark-text`}>
           Depoimentos
         </h2>
 
-        <div className="flex items-start justify-between bg-[#FFF0E3] shadow-md px-6 py-20 rounded-[30px]">
+        <div className="flex items-start justify-between bg-[#FFF0E3] shadow-md px-6 py-10 md:py-20 rounded-[30px]">
           <div className="w-[685px]">
-            <p className="text-xl text-light-text font-semibold">
+            <p className="text-base md:text-xl text-light-text font-semibold">
               Adotar o meu gatinho foi a melhor decisão que já tomei! Ele é um
               companheiro fiel, sempre me acompanhando pela casa e me dando
               muito amor e carinho. É incrível como um bichinho pode mudar tanto
@@ -41,7 +41,7 @@ export function Depoimentos() {
             </div>
           </div>
 
-          <div>
+          <div className="hidden md:block">
             <Image src={Depoimento1} height={400} alt="Foto da Rafaela Ferreira" />
           </div>
         </div>
