@@ -7,6 +7,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 import MenuHamburger from "../assets/images/icons/hamburger.svg";
 import CloseIcon from "../assets/images/icons/close.svg";
+import Link from "next/link";
 
 export function Header() {
   const [activeHeader, setActiveHeader] = useState(false);
@@ -71,7 +72,7 @@ export function Header() {
                 </a>
               </li>
 
-              <button className="flex items-center bg-orange-400 px-4 py-2 lg:px-6 lg:text-base text-sm lg:py-3 gap-3 rounded-full text-white font-bold max-w-xs w-full justify-center lg:hidden">
+              <Link href="/login" className="flex items-center bg-orange-400 px-4 py-2 lg:px-6 lg:text-base text-sm lg:py-3 gap-3 rounded-full text-white font-bold max-w-xs w-full justify-center lg:hidden">
                 Login{" "}
                 <Image
                   src={IconLogin}
@@ -79,15 +80,15 @@ export function Header() {
                   height={20}
                   alt="Icon login"
                 />
-              </button>
+              </Link>
             </ul>
           </nav>
         </div>
 
-        <button className="hidden lg:flex items-center bg-orange-400 px-4 py-2 lg:px-6 lg:text-base text-sm lg:py-3 gap-3 rounded-full text-white font-bold">
+        <Link href="/login" className="hidden lg:flex items-center bg-orange-400 px-4 py-2 lg:px-6 lg:text-base text-sm lg:py-3 gap-3 rounded-full text-white font-bold">
           Login{" "}
           <Image src={IconLogin} width={20} height={20} alt="Icon login" />
-        </button>
+        </Link>
 
         <button
           className="w-10 h-10 lg:hidden"
