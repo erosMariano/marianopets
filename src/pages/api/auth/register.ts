@@ -18,6 +18,7 @@ export default async function handler(
     const { email, name, password, phone }: UserCadastro = req.body;
     const existingUser = await prisma.user.findUnique({ where: { email } });
 
+    console.log(req.body)
 
     if(!existingUser){
       await prisma.user.create({
