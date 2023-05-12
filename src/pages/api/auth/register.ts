@@ -29,8 +29,8 @@ export default async function handler(
           phone,
         },
       });
-      res.status(201).json({ message: "Usuário criado" });
+      return res.status(201).json({ message: "Usuário criado" });
     }
   }
-  res.status(409).json({ message: "Usuário já existente" });
+  return res.status(409).json({ message: "Usuário já existente" });
 }
