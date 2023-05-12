@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { api } from "../../lib/axios";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
+import Link from "next/link";
 
 interface LoginUser {
   email: string;
@@ -49,7 +50,7 @@ function SignIn() {
             setUserData({ ...userData, password: el.target.value })
           }
         />
-        
+
         <br />
         <button
           className="w-full px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
@@ -58,6 +59,13 @@ function SignIn() {
           Login
         </button>
       </form>
+
+      <span className="block mx-auto w-full text-center">
+        Ainda não tem cadastro?{" "}
+        <Link className="text-blue-600" href={"/cadastro"}>
+          Clique aqui
+        </Link>
+      </span>
     </>
   );
 }
