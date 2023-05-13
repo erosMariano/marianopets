@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { api } from "../../lib/axios";
 import axios from "axios";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 interface LoginUser {
   email: string;
@@ -12,12 +13,14 @@ function SignIn() {
     email: "",
     password: "",
   });
+  const router = useRouter()
 
   async function submitForm(event: React.FormEvent) {
     event.preventDefault();
     try {
-      const sendRegisterUser = await api.post("/auth/login", userData);
-      alert(sendRegisterUser.data.message);
+      await api.post("/auth/login", userData);
+      await router.push("/people")
+      
     } catch (error) {
       if (axios.isAxiosError(error)) {
         alert(error.response?.data.message);
