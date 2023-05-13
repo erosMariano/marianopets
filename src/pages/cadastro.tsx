@@ -7,17 +7,11 @@ import InputMask from "react-input-mask";
 import { z } from "zod";
 
 import Head from "next/head";
+import Link from "next/link";
 import { useEffect, useRef } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Link from "next/link";
 
-interface UserCadastro {
-  name: string;
-  email: string;
-  password: string;
-  phone: string;
-}
 
 //remove os caracteres que não são números
 const phoneSchema = z
@@ -70,9 +64,7 @@ function SignUp() {
       });
 
       reset();
-      reset({
-        phone: "",
-      });
+      reset({ phone: "" });
     } catch (error) {
       if (axios.isAxiosError(error)) {
         toast.error(`${error.response?.data.message}`, {
