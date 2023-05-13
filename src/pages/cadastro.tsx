@@ -11,7 +11,7 @@ import Link from "next/link";
 import { useEffect, useRef } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import { useRouter } from "next/router";
 
 //remove os caracteres que não são números
 const phoneSchema = z
@@ -19,7 +19,7 @@ const phoneSchema = z
   .transform((value) => value.replace(/[^\d]/g, ""));
 
 const signUpSchema = z.object({
-  name: z.string().min(1, { message: "Nome necessário" }),
+  name: z.string().min(5, { message: "Nome necessário" }),
   email: z.string().email({ message: "Formato inválido de email" }),
   password: z.string().min(6, { message: "Mínimo 6 caracteres" }),
   phone: phoneSchema.refine((value) => value.length === 11, {
@@ -48,6 +48,8 @@ function SignUp() {
     }
   }, []);
 
+  const route = useRouter();
+
   async function onSubmit(data: SignUpSchema) {
     try {
       const sendRegisterUser = await api.post("/auth/register", data);
@@ -63,6 +65,7 @@ function SignUp() {
         theme: "light",
       });
 
+      route.push("/login");
       reset();
       reset({ phone: "" });
     } catch (error) {

@@ -12,7 +12,7 @@ export default People;
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookies = context.req.headers.cookie;
 
-  const res = await fetch("http://localhost:3000/api/auth/people", {
+  const res = await fetch("http://localhost:3000/api/auth/authorization", {
     headers: {
       Cookie: cookies!,
     },

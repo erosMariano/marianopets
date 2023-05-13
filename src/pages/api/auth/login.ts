@@ -27,15 +27,15 @@ export default async function LoginUserRouter(
           myPersonName: existingUser.name,
         };
 
-        const jwt = sign(claims, String(secretKey), { expiresIn: "1hr" });
+        const jwt = sign(claims, String(secretKey), { expiresIn: "72hrs" });
 
         res.setHeader(
           "Set-Cookie",
-          cookie.serialize("auth", jwt, {
+            cookie.serialize("auth", jwt, {
             httpOnly: true,
             secure: process.env.NODE_ENV !== "development",
             sameSite: "strict",
-            maxAge: 3600,
+            maxAge: 60 * 60 * 3, //3 dias
             path: "/",
           })
         );

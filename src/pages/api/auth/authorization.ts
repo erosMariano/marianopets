@@ -1,12 +1,7 @@
 import type { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
 import { verify } from "jsonwebtoken";
-import { prisma } from "../../../../lib/prisma";
 const secretKey = process.env.JWT_SECRET;
 
-interface LoginUser {
-  email: string;
-  password: string;
-}
 export const authenticated =
   (fn: NextApiHandler) => async (req: NextApiRequest, res: NextApiResponse) => {
     try {

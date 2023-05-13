@@ -19,7 +19,7 @@ function SignIn() {
     event.preventDefault();
     try {
       await api.post("/auth/login", userData);
-      await router.push("/people")
+      await router.push("/doador/form-doacao")
       
     } catch (error) {
       if (axios.isAxiosError(error)) {
