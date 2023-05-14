@@ -25,10 +25,12 @@ export function Header() {
         }
       }
     }
-
     window.addEventListener("scroll", teste);
   }, [activeHeader]);
 
+  function handleMenuClick(){
+    setActiveMenu((prevState) => !prevState)
+  }
   return (
     <header
       className={`flex items-center transition-all ${inter.className} ${
@@ -37,11 +39,13 @@ export function Header() {
     >
       <div className="flex items-center justify-between w-full max-w-[1312px] mx-auto px-4">
         <div className="flex items-center gap-10 ">
-          <Image
-            src={Logo}
-            alt="Logo Mariano Pets"
-            className="w-[200px] lg:w-[303px]"
-          />
+          <Link href={"/"}>
+            <Image
+              src={Logo}
+              alt="Logo Mariano Pets"
+              className="w-[200px] lg:w-[303px]"
+            />
+          </Link>
 
           <nav
             className={`${
@@ -50,30 +54,46 @@ export function Header() {
           >
             <button
               className="w-10 h-10 absolute top-5 right-5 lg:hidden"
-              onClick={() => setActiveMenu((prevState) => !prevState)}
+              onClick={() => handleMenuClick}
             >
               <Image src={CloseIcon} width={40} height={40} alt="Icon close" />
             </button>
 
             <ul className="flex gap-9 flex-col items-center justify-center w-full px-4 lg:flex-row">
               <li>
-                <a href="" className="font-bold text-base text-dark-blue">
+                <Link
+                  href=""
+                  className="font-bold text-base text-dark-blue"
+                  onClick={() => handleMenuClick}
+                >
                   Como funciona
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="" className="font-bold text-base text-dark-blue">
+                <Link
+                  href=""
+                  className="font-bold text-base text-dark-blue"
+                  onClick={() => handleMenuClick}
+                >
                   Nossos Pets
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="" className="font-bold text-base text-dark-blue">
+                <Link
+                  href=""
+                  className="font-bold text-base text-dark-blue"
+                  onClick={() => handleMenuClick}
+                >
                   Depoimentos
-                </a>
+                </Link>
               </li>
 
-              <Link href="/login" className="flex items-center bg-orange-400 px-4 py-2 lg:px-6 lg:text-base text-sm lg:py-3 gap-3 rounded-full text-white font-bold max-w-xs w-full justify-center lg:hidden">
-                Login{" "}
+              <Link
+                onClick={() => handleMenuClick}
+                href="/login"
+                className="flex items-center bg-orange-400 px-4 py-2 lg:px-6 lg:text-base text-sm lg:py-3 gap-3 rounded-full text-white font-bold max-w-xs w-full justify-center lg:hidden"
+              >
+                Quero doar{" "}
                 <Image
                   src={IconLogin}
                   width={20}
@@ -85,14 +105,17 @@ export function Header() {
           </nav>
         </div>
 
-        <Link href="/login" className="hidden lg:flex items-center bg-orange-400 px-4 py-2 lg:px-6 lg:text-base text-sm lg:py-3 gap-3 rounded-full text-white font-bold">
-          Login{" "}
+        <Link
+          href="/login"
+          className="hidden lg:flex items-center bg-orange-400 px-4 py-2 lg:px-6 lg:text-base text-sm lg:py-3 gap-3 rounded-full text-white font-bold"
+        >
+          Quero doar
           <Image src={IconLogin} width={20} height={20} alt="Icon login" />
         </Link>
 
         <button
           className="w-10 h-10 lg:hidden"
-          onClick={() => setActiveMenu((prevState) => !prevState)}
+          onClick={() => handleMenuClick}
         >
           <Image src={MenuHamburger} width={40} height={40} alt="Icon Menu" />
         </button>

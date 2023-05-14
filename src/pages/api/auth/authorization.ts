@@ -21,16 +21,12 @@ export default authenticated(async function getPeople(
 ) {
   try {
     if (req.cookies.auth) {
-      const decoded = jwt.verify(
-        req.cookies.auth,
-        String(secretKey)
-      ) as JwtPayload;
-
+      const decoded = jwt.verify(req.cookies.auth, String(secretKey)) as JwtPayload;
 
       const existingUser = await prisma.user.findUnique({
         where: { email: decoded.emailUser },
       });
-      
+
       res.json({
         email: existingUser?.email,
         name: existingUser?.name,

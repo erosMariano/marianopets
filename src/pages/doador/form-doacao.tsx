@@ -9,8 +9,7 @@ interface PropsFormDoacao {
   };
 }
 function FormDoacao({ people }: PropsFormDoacao) {
-  console.log(people);
-  return <div>People</div>;
+  return <div className="font-bold text-center mt-20">Olá, {people.name}</div>;
 }
 export default FormDoacao;
 
