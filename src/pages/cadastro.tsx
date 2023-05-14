@@ -97,18 +97,20 @@ function SignUp() {
       <ToastContainer />
 
       <Header />
-      <main className="max-w-[1312px] mx-auto px-4 mt-20">
-        <div className="bg-white w-full rounded-2xl shadow-sm flex overflow-hidden">
-          <div className="w-2/5 flex">
+      <main className="max-w-[1312px] mx-auto px-4 mt-20 pb-20">
+        <div className="bg-white w-full rounded-2xl shadow-sm flex lg:flex-row overflow-hidden">
+          <div className="w-2/5 h-[640px] lg:flex hidden">
             <Image
               src={ImageDogs}
               quality={100}
+              width={512}
+              height={640}
               priority={true}
               alt="Imagem de cachorro"
               style={{ objectFit: "cover" }}
             />
           </div>
-          <div className="w-[27rem] mx-auto py-20">
+          <div className="w-full  lg:w-[27rem] mx-auto px-4 py-10 lg:px-0 lg:py-20">
             <h1
               className={`${myFont.className} text-2xl font-bold text-center mb-8 text-dark-text`}
             >

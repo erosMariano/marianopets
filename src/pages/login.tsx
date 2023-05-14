@@ -8,7 +8,7 @@ import React, { useState } from "react";
 import { api } from "../../lib/axios";
 import { z } from "zod";
 
-import ImageDogs from "../assets/images/beagles-filhotes-bocejando.jpg";
+import ImageCat from "../assets/images/feche-o-gato-fofo-dentro-de-casa.jpg";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { GetServerSideProps } from "next";
@@ -65,23 +65,23 @@ function SignIn() {
       </Head>
 
       <Header />
-      <main className="max-w-[1312px] mx-auto px-4 mt-20">
+      <main className="max-w-[1312px] mx-auto px-4 mt-20 pb-20">
         <div className="bg-white w-full rounded-2xl shadow-sm flex overflow-hidden">
-          <div className="w-2/5 flex">
+          <div className="w-2/5 h-[456px]  lg:flex hidden">
             <Image
-              src={ImageDogs}
-              quality={100}
-              priority={true}
-              alt="Imagem de cachorro"
+              src={ImageCat}
+              width={512}
+              height={456}
               style={{ objectFit: "cover" }}
+              alt="Imagem de cachorro"
             />
           </div>
 
-          <div className="w-[27rem] mx-auto py-20">
+          <div className="w-full lg:w-[27rem] mx-auto px-4 py-10 lg:px-0 lg:py-20">
             <h1
               className={`${myFont.className} text-2xl font-bold text-center mb-8 text-dark-text`}
             >
-              Login
+              Acesse a Plataforma de Doação!{" "}
             </h1>
             <form
               className="flex flex-col gap-4"
@@ -106,6 +106,7 @@ function SignIn() {
                   errors.password && "border-red-500"
                 }`}
                 type="password"
+                autoComplete="current-password"
                 placeholder="Senha"
                 {...register("password")}
               />
