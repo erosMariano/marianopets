@@ -14,7 +14,7 @@ export function Header() {
   const [activeMenu, setActiveMenu] = useState(false);
 
   useEffect(() => {
-    function teste() {
+    function stickyMenu() {
       if (window.scrollY > 50) {
         if (!activeHeader) {
           setActiveHeader(true);
@@ -25,7 +25,7 @@ export function Header() {
         }
       }
     }
-    window.addEventListener("scroll", teste);
+    window.addEventListener("scroll", stickyMenu);
   }, [activeHeader]);
 
   function handleMenuClick(){
@@ -54,7 +54,7 @@ export function Header() {
           >
             <button
               className="w-10 h-10 absolute top-5 right-5 lg:hidden"
-              onClick={() => handleMenuClick}
+              onClick={() => handleMenuClick()}
             >
               <Image src={CloseIcon} width={40} height={40} alt="Icon close" />
             </button>
@@ -64,7 +64,7 @@ export function Header() {
                 <Link
                   href=""
                   className="font-bold text-base text-dark-blue"
-                  onClick={() => handleMenuClick}
+                  onClick={() => handleMenuClick()}
                 >
                   Como funciona
                 </Link>
@@ -73,7 +73,7 @@ export function Header() {
                 <Link
                   href=""
                   className="font-bold text-base text-dark-blue"
-                  onClick={() => handleMenuClick}
+                  onClick={() => handleMenuClick()}
                 >
                   Nossos Pets
                 </Link>
@@ -82,14 +82,14 @@ export function Header() {
                 <Link
                   href=""
                   className="font-bold text-base text-dark-blue"
-                  onClick={() => handleMenuClick}
+                  onClick={() => handleMenuClick()}
                 >
                   Depoimentos
                 </Link>
               </li>
 
               <Link
-                onClick={() => handleMenuClick}
+                onClick={() => handleMenuClick()}
                 href="/login"
                 className="flex items-center bg-orange-400 px-4 py-2 lg:px-6 lg:text-base text-sm lg:py-3 gap-3 rounded-full text-white font-bold max-w-xs w-full justify-center lg:hidden"
               >
@@ -115,7 +115,7 @@ export function Header() {
 
         <button
           className="w-10 h-10 lg:hidden"
-          onClick={() => handleMenuClick}
+          onClick={() => handleMenuClick()}
         >
           <Image src={MenuHamburger} width={40} height={40} alt="Icon Menu" />
         </button>
