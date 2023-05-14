@@ -10,7 +10,7 @@ export function Layout({ children }: LayoutProps) {
     <>
       <Header />
       {children}
-      <Footer />
     </>
   );
 }
+

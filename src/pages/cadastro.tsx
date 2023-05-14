@@ -12,6 +12,10 @@ import { useEffect, useRef } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/router";
+import Image from "next/image";
+
+import ImageDogs from "../assets/images/beagles-filhotes-bocejando.jpg";
+import { myFont } from "@/components/pages/Home/Hero";
 
 //remove os caracteres que não são números
 const phoneSchema = z
@@ -90,79 +94,107 @@ function SignUp() {
         <title>Mariano Pets - Cadastro</title>
       </Head>
       <ToastContainer />
-      <h1 className="text-2xl font-bold text-center my-5">Cadastro</h1>
-      <form
-        className="max-w-md mx-auto p-4 bg-gray-100 rounded-lg"
-        onSubmit={handleSubmit(onSubmit)}
-      >
-        <input
-          className="w-full mb-2 px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-          type="text"
-          placeholder="Nome completo"
-          {...register("name", { required: true })}
-        />
-        {errors.name && (
-          <span className="text-red-500 -mt-2 flex mb-2">
-            {errors.name.message}
-          </span>
-        )}
 
-        <input
-          className="w-full mb-2 px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-          type="email"
-          placeholder="E-mail"
-          autoComplete="email"
-          {...register("email", { required: true })}
-        />
-        {errors.email && (
-          <span className="text-red-500 -mt-2 flex mb-2">
-            {errors.email.message}
-          </span>
-        )}
+      <main className="max-w-[1312px] mx-auto px-4 mt-20">
+        <div className="bg-white w-full rounded-2xl shadow-sm flex overflow-hidden">
+          <div className="w-2/5 flex">
+            <Image
+              src={ImageDogs}
+              quality={100}
+              priority={true}
+              alt="Imagem de cachorro"
+              style={{ objectFit: "cover" }}
+            />
+          </div>
+          <div className="w-[27rem] mx-auto py-20">
+            <h1
+              className={`${myFont.className} text-2xl font-bold text-center mb-8 text-dark-text`}
+            >
+              Seja parte da nossa Comunidade Pet!
+            </h1>
+            <form
+              className="flex flex-col gap-4"
+              onSubmit={handleSubmit(onSubmit)}
+            >
+              <input
+                className={`w-full px-4 py-2 rounded-md border-gray-300 font-semibold outline-none transition-all border focus:border-yellow-500 text-gray-700 ${
+                  errors.name && "border-red-500"
+                }`}
+                type="text"
+                placeholder="Nome completo"
+                {...register("name", { required: true })}
+              />
+              {errors.name && (
+                <span className="text-red-400 -mt-4 flex -mb-2 font-semibold">
+                  {errors.name.message}
+                </span>
+              )}
 
-        <input
-          className="w-full mb-2 px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-          type="password"
-          autoComplete="current-password"
-          placeholder="Senha"
-          {...register("password", { required: true })}
-        />
-        {errors.password && (
-          <span className="text-red-500 -mt-2 flex mb-2">
-            {errors.password.message}
-          </span>
-        )}
+              <input
+                className={`w-full px-4 py-2 rounded-md border-gray-300 font-semibold outline-none transition-all border focus:border-yellow-500 text-gray-700 ${
+                  errors.email && "border-red-500"
+                }`}
+                type="email"
+                placeholder="E-mail"
+                autoComplete="email"
+                {...register("email", { required: true })}
+              />
+              {errors.email && (
+                <span className="text-red-400 -mt-4 flex -mb-2 font-semibold">
+                  {errors.email.message}
+                </span>
+              )}
 
-        <InputMask
-          placeholder="Número de telefone"
-          className="w-full mb-2 px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-          mask="(99)9 9999 9999"
-          defaultValue={""}
-          alwaysShowMask={true}
-          {...register("phone", { required: true })}
-        />
+              <input
+                className={`w-full px-4 py-2 rounded-md border-gray-300 font-semibold outline-none transition-all border focus:border-yellow-500 text-gray-700 ${
+                  errors.password && "border-red-500"
+                }`}
+                type="password"
+                autoComplete="current-password"
+                placeholder="Senha"
+                {...register("password", { required: true })}
+              />
+              {errors.password && (
+                <span className="text-red-400 -mt-4 flex -mb-2 font-semibold">
+                  {errors.password.message}
+                </span>
+              )}
 
-        {errors.phone && (
-          <span className="text-red-500 -mt-2 flex mb-2">
-            {errors.phone.message}
-          </span>
-        )}
+              <InputMask
+                placeholder="Número de telefone"
+                className={`w-full px-4 py-2 rounded-md border-gray-300 font-semibold outline-none transition-all border focus:border-yellow-500 text-gray-700 ${
+                  errors.phone && "border-red-500"
+                }`}
+                mask="(99)9 9999 9999"
+                defaultValue={""}
+                alwaysShowMask={true}
+                {...register("phone", { required: true })}
+              />
 
-        <button
-          className="w-full px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:cursor-not-allowed disabled:bg-blue-950"
-          type="submit"
-          disabled={isSubmitting}
-        >
-          Cadastrar
-        </button>
-      </form>
+              {errors.phone && (
+                <span className="text-red-400 -mt-4 flex -mb-2 font-semibold">
+                  {errors.phone.message}
+                </span>
+              )}
 
-      <span className="block mx-auto w-full text-center">
-        Já tem cadastro?{" "}
-        <Link className="text-blue-600" href={"/login"}>
-          Clique aqui
-        </Link>
-      </span>
+              <button
+                className="w-full px-4 py-2 transition-all bg-orange-400 font-semibold text-white rounded-md hover:bg-orange-500 disabled:cursor-not-allowed disabled:bg-blue-950"
+                type="submit"
+                disabled={isSubmitting}
+              >
+                Cadastrar
+              </button>
+            </form>
+
+            <span className="block mx-auto w-full text-center mt-5 font-semibold ">
+              <span className="text-light-text mr-1">Já possui cadastro?</span>
+              <Link className="text-orange-400 transition-all hover:text-orange-500" href={"/login"}>
+                Clique aqui
+              </Link>
+            </span>
+          </div>
+        </div>
+      </main>
     </>
   );
 }

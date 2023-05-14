@@ -24,14 +24,14 @@ export default async function LoginUserRouter(
       if (resultHash) {
         const claims = {
           sub: existingUser.id,
-          emailUser: existingUser.email
+          emailUser: existingUser.email,
         };
 
         const jwt = sign(claims, String(secretKey), { expiresIn: "72hrs" });
 
         res.setHeader(
           "Set-Cookie",
-          cookie.serialize("auth", jwt, {
+          cookie.serialize("authpetsmariano", jwt, {
             httpOnly: true,
             secure: process.env.NODE_ENV !== "development",
             sameSite: "strict",
@@ -43,9 +43,13 @@ export default async function LoginUserRouter(
           .status(201)
           .json({ message: "Bem vindo ao petsMariano", userEmail: email });
       } else {
-        return res.status(201).json({ message: "Senha incorreta" });
+        return res
+          .status(401)
+          .json({ type: "password", message: "Senha incorreta" });
       }
     }
-    return res.status(404).json({ message: "Usuário não existe" });
+    return res
+      .status(404)
+      .json({ type: "user", message: "Usuário não existe" });
   }
 }

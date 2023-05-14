@@ -1,3 +1,4 @@
+import { Footer } from "@/components/Footer";
 import { Adote } from "@/components/pages/Home/Adote";
 import { Depoimentos } from "@/components/pages/Home/Depoimentos";
 import { Hero } from "@/components/pages/Home/Hero";
@@ -10,10 +11,15 @@ const inter = Inter({ subsets: ["latin"] });
 export default function Home() {
   return (
     <>
-    <Head>
-      <title>Mariano Pets - Encontre seu companheiro perfeito para adoção</title>
-      <meta name="description" content="Encontre seu companheiro perfeito para adoção no nosso site de adoção de animais. Temos cães, gatos e outros animais em busca de um lar amoroso. Visite-nos hoje para encontrar o amigo peludo ideal!" />
-    </Head>
+      <Head>
+        <title>
+          Mariano Pets - Encontre seu companheiro perfeito para adoção
+        </title>
+        <meta
+          name="description"
+          content="Encontre seu companheiro perfeito para adoção no nosso site de adoção de animais. Temos cães, gatos e outros animais em busca de um lar amoroso. Visite-nos hoje para encontrar o amigo peludo ideal!"
+        />
+      </Head>
       <main className={inter.className}>
         <Hero />
         <NosAjudar />
@@ -21,6 +27,8 @@ export default function Home() {
         <Adote />
         <Depoimentos />
       </main>
+      <Footer />
     </>
   );
 }
+

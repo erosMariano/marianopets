@@ -8,7 +8,7 @@ import jwt from "jsonwebtoken";
 export const authenticated =
   (fn: NextApiHandler) => async (req: NextApiRequest, res: NextApiResponse) => {
     try {
-      verify(req.cookies.auth!, String(secretKey));
+      verify(req.cookies.authpetsmariano!, String(secretKey));
       return await fn(req, res);
     } catch (err) {
       res.status(500).json({ message: "Usuário não autorizado" });
@@ -20,8 +20,8 @@ export default authenticated(async function getPeople(
   res: NextApiResponse
 ) {
   try {
-    if (req.cookies.auth) {
-      const decoded = jwt.verify(req.cookies.auth, String(secretKey)) as JwtPayload;
+    if (req.cookies.authpetsmariano) {
+      const decoded = jwt.verify(req.cookies.authpetsmariano, String(secretKey)) as JwtPayload;
 
       const existingUser = await prisma.user.findUnique({
         where: { email: decoded.emailUser },

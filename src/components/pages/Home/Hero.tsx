@@ -3,7 +3,7 @@ import ImageCat from "../../../assets/images/portrait-adorable-cat.png";
 import ImageDog from "../../../assets/images/portrait-adorable-dog.png";
 
 import localFont from "next/font/local";
-const myFont = localFont({ src: "../fonts/MADE_Gentle.otf" });
+export const myFont = localFont({ src: "../fonts/MADE_Gentle.otf" });
 
 import ArrowButton from "../../../assets/images/icons/arrow-button.svg";
 import PataIcon from "../../../assets/images/icons/pata.svg";
