@@ -14,6 +14,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { GetServerSideProps } from "next";
 import { IncomingMessage } from "http";
 import { checkCookies } from "@/utils/cookieUtils";
+import { Header } from "@/components/Header";
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Formato inválido de email" }),
@@ -40,10 +41,9 @@ function SignIn() {
 
   async function submitForm(user: LoginSchema) {
     try {
-      const userResponse = await api.post("/auth/login", user);
+      await api.post("/auth/login", user);
       await router.push("/doador/form-doacao");
       reset();
-      console.log("oii");
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const errorMessage = error.response?.data.message;
@@ -64,6 +64,7 @@ function SignIn() {
         <title>Mariano Pets - Login</title>
       </Head>
 
+      <Header />
       <main className="max-w-[1312px] mx-auto px-4 mt-20">
         <div className="bg-white w-full rounded-2xl shadow-sm flex overflow-hidden">
           <div className="w-2/5 flex">
@@ -154,7 +155,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       },
     };
   }
-  
+
   return {
     props: {
       cookiesValidate,

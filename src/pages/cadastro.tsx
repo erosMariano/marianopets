@@ -16,6 +16,7 @@ import Image from "next/image";
 
 import ImageDogs from "../assets/images/beagles-filhotes-bocejando.jpg";
 import { myFont } from "@/components/pages/Home/Hero";
+import { Header } from "@/components/Header";
 
 //remove os caracteres que não são números
 const phoneSchema = z
@@ -95,6 +96,7 @@ function SignUp() {
       </Head>
       <ToastContainer />
 
+      <Header />
       <main className="max-w-[1312px] mx-auto px-4 mt-20">
         <div className="bg-white w-full rounded-2xl shadow-sm flex overflow-hidden">
           <div className="w-2/5 flex">
@@ -188,7 +190,10 @@ function SignUp() {
 
             <span className="block mx-auto w-full text-center mt-5 font-semibold ">
               <span className="text-light-text mr-1">Já possui cadastro?</span>
-              <Link className="text-orange-400 transition-all hover:text-orange-500" href={"/login"}>
+              <Link
+                className="text-orange-400 transition-all hover:text-orange-500"
+                href={"/login"}
+              >
                 Clique aqui
               </Link>
             </span>

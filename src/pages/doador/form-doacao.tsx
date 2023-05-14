@@ -1,3 +1,4 @@
+import { Header } from "@/components/Header";
 import { GetServerSideProps } from "next";
 import React from "react";
 
@@ -9,7 +10,12 @@ interface PropsFormDoacao {
   };
 }
 function FormDoacao({ people }: PropsFormDoacao) {
-  return <div className="font-bold text-center mt-20">Olá, {people.name}</div>;
+  return (
+    <>
+      <Header authenticated/>
+      <div className="font-bold text-center mt-20">Olá, {people.name}</div>
+    </>
+  );
 }
 export default FormDoacao;
 

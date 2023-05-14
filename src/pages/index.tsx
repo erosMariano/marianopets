@@ -1,4 +1,5 @@
 import { Footer } from "@/components/Footer";
+import { Header } from "@/components/Header";
 import { Adote } from "@/components/pages/Home/Adote";
 import { Depoimentos } from "@/components/pages/Home/Depoimentos";
 import { Hero } from "@/components/pages/Home/Hero";
@@ -20,6 +21,7 @@ export default function Home() {
           content="Encontre seu companheiro perfeito para adoção no nosso site de adoção de animais. Temos cães, gatos e outros animais em busca de um lar amoroso. Visite-nos hoje para encontrar o amigo peludo ideal!"
         />
       </Head>
+      <Header />
       <main className={inter.className}>
         <Hero />
         <NosAjudar />
@@ -31,4 +33,3 @@ export default function Home() {
     </>
   );
 }
-

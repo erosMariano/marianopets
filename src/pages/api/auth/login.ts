@@ -52,4 +52,18 @@ export default async function LoginUserRouter(
       .status(404)
       .json({ type: "user", message: "Usuário não existe" });
   }
+  if (req.method === "PUT") {
+    res.setHeader(
+      "Set-Cookie",
+      cookie.serialize("authpetsmariano", "", {
+        httpOnly: true,
+        secure: process.env.NODE_ENV !== "development",
+        sameSite: "strict",
+        expires: new Date(0), // Define uma data de expiração no passado para remover o cookie
+        path: "/",
+      })
+    );
+
+    return res.status(204).end();
+  }
 }

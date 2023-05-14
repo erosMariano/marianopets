@@ -1,25 +1,23 @@
-import Image from "next/image";
-import React, { useEffect, useState } from "react";
-import Logo from "../assets/images/logo.svg";
-import IconLogin from "../assets/images/icon-login.svg";
 import { Inter } from "next/font/google";
+import Image from "next/image";
+import { useEffect, useState } from "react";
+import IconLogin from "../assets/images/icon-login.svg";
+import Logo from "../assets/images/logo.svg";
 const inter = Inter({ subsets: ["latin"] });
 
-import MenuHamburger from "../assets/images/icons/hamburger.svg";
-import CloseIcon from "../assets/images/icons/close.svg";
 import Link from "next/link";
-import { GetServerSideProps } from "next";
-import { IncomingMessage } from "http";
-import { checkCookies } from "@/utils/cookieUtils";
+import { api } from "../../lib/axios";
+import CloseIcon from "../assets/images/icons/close.svg";
+import MenuHamburger from "../assets/images/icons/hamburger.svg";
+import { useRouter } from "next/router";
 
 interface PropsTeste {
-  cookies?: boolean;
+  authenticated?: boolean;
 }
-export function Header({ cookies }: PropsTeste) {
-
-  console.log(cookies)
+export function Header({ authenticated }: PropsTeste) {
   const [activeHeader, setActiveHeader] = useState(false);
   const [activeMenu, setActiveMenu] = useState(false);
+  const route = useRouter();
 
   useEffect(() => {
     function stickyMenu() {
@@ -38,6 +36,15 @@ export function Header({ cookies }: PropsTeste) {
 
   function handleMenuClick() {
     setActiveMenu((prevState) => !prevState);
+  }
+
+  async function handleClickInButtonControllerCookies() {
+    if(authenticated){
+      await api.put("/auth/login")
+      await route.push("/login")
+    }else{
+      await route.push("/login")
+    }
   }
   return (
     <header
@@ -96,30 +103,67 @@ export function Header({ cookies }: PropsTeste) {
                 </Link>
               </li>
 
-              <Link
-                onClick={() => handleMenuClick()}
-                href="/login"
+              <button
+                onClick={() => handleClickInButtonControllerCookies()}
                 className="flex items-center bg-orange-400 px-4 py-2 transition-all lg:px-6 lg:text-base text-sm hover:bg-orange-500 lg:py-3 gap-3 rounded-full text-white font-bold max-w-xs w-full justify-center lg:hidden"
               >
-                Quero doar{" "}
+                <>
+                  {authenticated ? (
+                    <>
+                      Sair
+                      <Image
+                        src={IconLogin}
+                        width={20}
+                        height={20}
+                        alt="Icon login"
+                      />
+                    </>
+                  ) : (
+                    <>
+                      Quero doar
+                      <Image
+                        src={IconLogin}
+                        width={20}
+                        height={20}
+                        alt="Icon login"
+                      />
+                    </>
+                  )}
+                </>
+              </button>
+            </ul>
+          </nav>
+        </div>
+
+        <button
+          onClick={() => handleClickInButtonControllerCookies()}
+          className="hidden lg:flex items-center bg-orange-400 hover:bg-orange-500 transition-all px-4 py-2 lg:px-6 lg:text-base text-sm lg:py-3 gap-3 rounded-full text-white font-bold"
+        >
+          <>
+            {authenticated ? (
+              <>
+                <Image
+                  src={IconLogin}
+                  width={20}
+                  height={20}
+                  className="rotate-180"
+                  alt="Icon login"
+                />
+                Sair
+              </>
+            ) : (
+              <>
+                Quero doar
                 <Image
                   src={IconLogin}
                   width={20}
                   height={20}
                   alt="Icon login"
                 />
-              </Link>
-            </ul>
-          </nav>
-        </div>
-
-        <Link
-          href="/login"
-          className="hidden lg:flex items-center bg-orange-400 hover:bg-orange-500 transition-all px-4 py-2 lg:px-6 lg:text-base text-sm lg:py-3 gap-3 rounded-full text-white font-bold"
-        >
-          Quero doar
-          <Image src={IconLogin} width={20} height={20} alt="Icon login" />
-        </Link>
+              </>
+            )}
+          </>
+        </button>
 
         <button
           className="w-10 h-10 lg:hidden"
