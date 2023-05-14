@@ -1,6 +1,9 @@
 import type { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
-import { verify } from "jsonwebtoken";
+import { JwtPayload, verify } from "jsonwebtoken";
+import { prisma } from "../../../../lib/prisma";
 const secretKey = process.env.JWT_SECRET;
+
+import jwt from "jsonwebtoken";
 
 export const authenticated =
   (fn: NextApiHandler) => async (req: NextApiRequest, res: NextApiResponse) => {
@@ -17,7 +20,23 @@ export default authenticated(async function getPeople(
   res: NextApiResponse
 ) {
   try {
-    res.json("Dentro");
+    if (req.cookies.auth) {
+      const decoded = jwt.verify(
+        req.cookies.auth,
+        String(secretKey)
+      ) as JwtPayload;
+
+
+      const existingUser = await prisma.user.findUnique({
+        where: { email: decoded.emailUser },
+      });
+      
+      res.json({
+        email: existingUser?.email,
+        name: existingUser?.name,
+        phone: existingUser?.phone,
+      });
+    }
   } catch (error) {
     res.status(404).json({ message: "Usuário não existe" });
   }

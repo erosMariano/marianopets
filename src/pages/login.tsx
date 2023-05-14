@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import { api } from "../../lib/axios";
 import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import React, { useContext, useState } from "react";
+import { api } from "../../lib/axios";
 
 interface LoginUser {
   email: string;
@@ -13,14 +13,13 @@ function SignIn() {
     email: "",
     password: "",
   });
-  const router = useRouter()
+  const router = useRouter();
 
   async function submitForm(event: React.FormEvent) {
     event.preventDefault();
     try {
-      await api.post("/auth/login", userData);
-      await router.push("/doador/form-doacao")
-      
+      const user = await api.post("/auth/login", userData);
+      await router.push("/doador/form-doacao");
     } catch (error) {
       if (axios.isAxiosError(error)) {
         alert(error.response?.data.message);

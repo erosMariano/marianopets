@@ -1,23 +1,30 @@
 import { GetServerSideProps } from "next";
-import { Router } from "next/router";
 import React from "react";
 
-function FormDoacao(props: any) {
-  console.log(props);
+interface PropsFormDoacao {
+  people: {
+    email: string;
+    name: string;
+    phone: string;
+  };
+}
+function FormDoacao({ people }: PropsFormDoacao) {
+  console.log(people);
   return <div>People</div>;
 }
-
 export default FormDoacao;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookies = context.req.headers.cookie;
 
-
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/authorization`, {
-    headers: {
-      Cookie: cookies!,
-    },
-  });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/authorization`,
+    {
+      headers: {
+        Cookie: cookies!,
+      },
+    }
+  );
 
   const people = await res.json();
 

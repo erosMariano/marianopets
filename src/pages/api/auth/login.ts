@@ -1,8 +1,8 @@
+import { compare } from "bcrypt";
+import cookie from "cookie";
+import { sign } from "jsonwebtoken";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "../../../../lib/prisma";
-import { compare } from "bcrypt";
-import { sign } from "jsonwebtoken";
-import cookie from "cookie";
 
 interface LoginUser {
   email: string;
@@ -24,14 +24,14 @@ export default async function LoginUserRouter(
       if (resultHash) {
         const claims = {
           sub: existingUser.id,
-          myPersonName: existingUser.name,
+          emailUser: existingUser.email
         };
 
         const jwt = sign(claims, String(secretKey), { expiresIn: "72hrs" });
 
         res.setHeader(
           "Set-Cookie",
-            cookie.serialize("auth", jwt, {
+          cookie.serialize("auth", jwt, {
             httpOnly: true,
             secure: process.env.NODE_ENV !== "development",
             sameSite: "strict",
@@ -39,8 +39,9 @@ export default async function LoginUserRouter(
             path: "/",
           })
         );
-
-        return res.status(201).json({ message: "Bem vindo ao petsMariano" });
+        return res
+          .status(201)
+          .json({ message: "Bem vindo ao petsMariano", userEmail: email });
       } else {
         return res.status(201).json({ message: "Senha incorreta" });
       }
