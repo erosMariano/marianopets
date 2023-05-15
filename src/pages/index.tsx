@@ -6,8 +6,8 @@ import { Hero } from "@/components/pages/Home/Hero";
 import { NosAjudar } from "@/components/pages/Home/NosAjudar";
 import { NossaTarefa } from "@/components/pages/Home/NossaTarefa";
 import { Inter } from "next/font/google";
-import Head from "next/head";
 const inter = Inter({ subsets: ["latin"] });
+import Head from "next/head";
 
 export default function Home() {
   return (

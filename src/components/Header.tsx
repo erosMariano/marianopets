@@ -86,11 +86,11 @@ export function Header({ authenticated }: PropsTeste) {
               </li>
               <li>
                 <Link
-                  href=""
+                  href="/quero-adotar"
                   className="font-bold text-base text-dark-blue"
                   onClick={() => handleMenuClick()}
                 >
-                  Nossos Pets
+                  Quero adotar
                 </Link>
               </li>
               <li>
