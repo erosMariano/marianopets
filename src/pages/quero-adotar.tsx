@@ -7,8 +7,6 @@ const inter = Inter({ subsets: ["latin"] });
 
 import Animal from "../assets/images/adote-cao.png";
 import Animal2 from "../assets/images/portrait-adorable-cat.png";
-import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
 
 import Image, { StaticImageData } from "next/image";
 import { api } from "../../lib/axios";
@@ -52,7 +50,33 @@ function NossoPets() {
     { type: "reptile", name: "Réptil", active: false },
   ]);
 
-  const [listAnimals, setListAnimals] = useState<AnimalContent[]>([]);
+  const [listAnimals, setListAnimals] = useState<AnimalContent[]>([
+    {
+      imageUrl: Animal,
+      type: "dog",
+      name: "Cachorro fábio",
+      localization: "Embu-Guaçu, SP",
+    },
+    {
+      imageUrl: Animal2,
+      type: "cat",
+      name: "Gato fabricio",
+      localization: "Embu-Guaçu, SP",
+    },
+    {
+      imageUrl: Animal2,
+      type: "cat",
+      name: "Gato fabricio",
+      localization: "Embu-Guaçu, SP",
+    },
+
+    {
+      imageUrl: Animal2,
+      type: "cat",
+      name: "Gato fabricio",
+      localization: "Embu-Guaçu, SP",
+    },
+  ]);
 
   const filteredAnimals = listAnimals.filter((el) => {
     return (
@@ -61,38 +85,6 @@ function NossoPets() {
     );
   });
 
-
-  setTimeout(() => {
-    setListAnimals([
-      {
-        imageUrl: Animal,
-        type: "dog",
-        name: "Cachorro fábio",
-        localization: "Embu-Guaçu, SP",
-      },
-      {
-        imageUrl: Animal2,
-        type: "cat",
-        name: "Gato fabricio",
-        localization: "Embu-Guaçu, SP",
-      },
-      {
-        imageUrl: Animal2,
-        type: "cat",
-        name: "Gato fabricio",
-        localization: "Embu-Guaçu, SP",
-      },
-
-      {
-        imageUrl: Animal2,
-        type: "cat",
-        name: "Gato fabricio",
-        localization: "Embu-Guaçu, SP",
-      },
-    ]);
-  }, 2000);
-
-  
   return (
     <>
       <Head>
@@ -104,7 +96,7 @@ function NossoPets() {
       </Head>
       <Header />
       <main
-        className={`${inter.className} min-h-[60vh] mt-10 lg:mt-20 justify-between w-full max-w-[1312px] mx-auto px-4`}
+        className={`${inter.className} flex-grow mt-10 lg:mt-20 justify-between w-full max-w-[1312px] mx-auto px-4`}
       >
         <FilterQueroAdotar
           defineItemActiveFilter={setItemActiveFilter}
@@ -147,34 +139,18 @@ function NossoPets() {
               Nenhum animal encontrado.
             </p>
             <div className="relative w-[300px] h-[300px] 2xl:w-[400px] 2xl:h-[400px]">
-              <Image alt="" fill src={ConfusedCat} quality={100} />
+              <Image alt="" fill src={ConfusedCat} quality={100} priority />
             </div>
           </div>
         ) : (
-          <SkeletonTheme baseColor="#cecece" highlightColor="#e6e6e6">
-            <div className="flex justify-between gap-[26px] flex-col lg:flex-row">
-              <Skeleton
-                className="w-full lg:w-[300px]"
-                height={288}
-                borderRadius={16}
-              />
-              <Skeleton
-                className="w-full lg:w-[300px]"
-                height={288}
-                borderRadius={16}
-              />
-              <Skeleton
-                className="w-full lg:w-[300px]"
-                height={288}
-                borderRadius={16}
-              />
-              <Skeleton
-                className="w-full lg:w-[300px]"
-                height={288}
-                borderRadius={16}
-              />
+          <div className="flex w-full flex-1 flex-col items-center">
+            <div className="animate-pulse flex-row items-center flex justify-between w-full flex-wrap gap-[26px]">
+              <div className="w-full md:w-[48%] h-[288px] lg:w-[300px] rounded-2xl bg-gray-300 block"></div>
+              <div className="w-full md:w-[48%] h-[288px] lg:w-[300px] rounded-2xl bg-gray-300 block"></div>
+              <div className="w-full md:w-[48%] h-[288px] lg:w-[300px] rounded-2xl bg-gray-300 block"></div>
+              <div className="w-full md:w-[48%] h-[288px] lg:w-[300px] rounded-2xl bg-gray-300 block"></div>
             </div>
-          </SkeletonTheme>
+          </div>
         )}
       </main>
       <Footer />

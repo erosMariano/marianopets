@@ -22,20 +22,30 @@ interface FilterQueroAdotar {
 function FilterQueroAdotar({
   defineItemActiveFilter,
   setListItemFilter,
-  listItemFilter
+  listItemFilter,
 }: FilterQueroAdotar) {
   const [itemActiveFilter, setItemActiveFilter] = useState(0);
-  
+
   function filterActive(indexElement: number) {
     setListItemFilter((prevState) => {
-      return prevState.map((item, index) => {
+      const updatedList = prevState.map((item, index) => {
         if (index === indexElement) {
           return { ...item, active: !item.active };
         } else {
           return { ...item, active: false };
         }
       });
+
+      // Verificar se todos os itens estão desativados
+      const allItemsInactive = updatedList.every((item) => !item.active);
+
+      if (allItemsInactive) {
+        updatedList[indexElement].active = true; // Definir o primeiro item como ativo
+      }
+
+      return updatedList;
     });
+
     setItemActiveFilter(indexElement);
   }
 
