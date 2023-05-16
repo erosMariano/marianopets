@@ -7,20 +7,16 @@ const inter = Inter({ subsets: ["latin"] });
 
 import Animal from "../assets/images/adote-cao.png";
 import Animal2 from "../assets/images/portrait-adorable-cat.png";
-import Animal3 from "../assets/images/beagles-filhotes-bocejando.jpg";
-
-import Animal4 from "../assets/images/models/04-09_gato_SITE.webp";
-import Animal5 from "../assets/images/models/2098203-gato-malhado-prateado-sentado-no-fundo-verde-gratis-foto.jpg";
-import Animal6 from "../assets/images/models/beagles-filhotes-bocejando.jpg";
-import Animal7 from "../assets/images/models/download.jpg";
-import Animal8 from "../assets/images/models/feche-o-gato-fofo-dentro-de-casa.jpg";
-import Animal9 from "../assets/images/models/gato-e-mamifero-entenda-mais-sobre-a-especie.webp";
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 import Image, { StaticImageData } from "next/image";
 import { api } from "../../lib/axios";
 import Link from "next/link";
 import { convertStringInSlug } from "@/utils/convertStringInSlug";
-import ButtonFilter from "@/components/ButtonFilter";
+import ConfusedCat from "../assets/images/confusedCat.png";
+import { myFont } from "@/components/pages/Home/Hero";
+import FilterQueroAdotar from "@/components/pages/quero-adotar/Filter";
 
 interface AnimalContent {
   imageUrl: string | StaticImageData;
@@ -28,6 +24,12 @@ interface AnimalContent {
   name: string;
   localization: string;
 }
+interface ListItemFilter {
+  type: string;
+  name: string;
+  active: boolean;
+}
+
 function NossoPets() {
   // const [imagesFromAPI, setImagesFromAPI] = useState([]);
 
@@ -39,7 +41,8 @@ function NossoPets() {
   //   getImages();
   // }, []);
 
-  const [listItemFilter, setListItemFilter] = useState([
+  const [itemActiveFilter, setItemActiveFilter] = useState(0);
+  const [listItemFilter, setListItemFilter] = useState<ListItemFilter[]>([
     { type: "all", name: "Todos animais", active: true },
     { type: "dog", name: "Cachorro", active: false },
     { type: "cat", name: "Gato", active: false },
@@ -49,36 +52,7 @@ function NossoPets() {
     { type: "reptile", name: "Réptil", active: false },
   ]);
 
-  const [itemActiveFilter, setItemActiveFilter] = useState(0);
-
-  function filterActive(indexElement: number) {
-    setListItemFilter((prevState) => {
-      return prevState.map((item, index) => {
-        if (index === indexElement) {
-          return { ...item, active: !item.active };
-        } else {
-          return { ...item, active: false };
-        }
-      });
-    });
-
-    setItemActiveFilter(indexElement);
-  }
-
-  const listAnimals: AnimalContent[] = [
-    {
-      imageUrl: Animal,
-      type: "dog",
-      name: "Cachorro fábio",
-      localization: "Embu-Guaçu, SP",
-    },
-    {
-      imageUrl: Animal2,
-      type: "cat",
-      name: "Gato fabricio",
-      localization: "Embu-Guaçu, SP",
-    },
-  ];
+  const [listAnimals, setListAnimals] = useState<AnimalContent[]>([]);
 
   const filteredAnimals = listAnimals.filter((el) => {
     return (
@@ -87,6 +61,38 @@ function NossoPets() {
     );
   });
 
+
+  setTimeout(() => {
+    setListAnimals([
+      {
+        imageUrl: Animal,
+        type: "dog",
+        name: "Cachorro fábio",
+        localization: "Embu-Guaçu, SP",
+      },
+      {
+        imageUrl: Animal2,
+        type: "cat",
+        name: "Gato fabricio",
+        localization: "Embu-Guaçu, SP",
+      },
+      {
+        imageUrl: Animal2,
+        type: "cat",
+        name: "Gato fabricio",
+        localization: "Embu-Guaçu, SP",
+      },
+
+      {
+        imageUrl: Animal2,
+        type: "cat",
+        name: "Gato fabricio",
+        localization: "Embu-Guaçu, SP",
+      },
+    ]);
+  }, 2000);
+
+  
   return (
     <>
       <Head>
@@ -98,30 +104,22 @@ function NossoPets() {
       </Head>
       <Header />
       <main
-        className={`${inter.className} min-h-[70vh] mt-20 justify-between w-full max-w-[1312px] mx-auto px-4`}
+        className={`${inter.className} min-h-[60vh] mt-10 lg:mt-20 justify-between w-full max-w-[1312px] mx-auto px-4`}
       >
-        <div className="flex justify-center items-center gap-8 mb-8">
-          {listItemFilter.map(({ name, active, type }, index) => {
-            return (
-              <ButtonFilter
-                name={name}
-                active={active}
-                key={index}
-                indexElement={index}
-                activeItemFunc={filterActive}
-              />
-            );
-          })}
-        </div>
+        <FilterQueroAdotar
+          defineItemActiveFilter={setItemActiveFilter}
+          setListItemFilter={setListItemFilter}
+          listItemFilter={listItemFilter}
+        />
 
         {filteredAnimals.length > 0 ? (
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap gap-[26px]">
             {filteredAnimals.map((el, index) => {
               return (
                 <Link
                   href={`adocao/${convertStringInSlug(el.name)}`}
                   key={index}
-                  className="flex flex-col relative w-[300px] overflow-hidden"
+                  className="flex flex-col relative w-full  md:w-[48%] lg:w-[300px] overflow-hidden shadow-sm hover:shadow-md rounded-2xl    transition-all"
                 >
                   <>
                     <Image
@@ -143,8 +141,40 @@ function NossoPets() {
               );
             })}
           </div>
+        ) : listAnimals.length >= 1 ? (
+          <div className="flex flex-col items-center">
+            <p className={`${myFont.className} text-dark-blue text-2xl`}>
+              Nenhum animal encontrado.
+            </p>
+            <div className="relative w-[300px] h-[300px] 2xl:w-[400px] 2xl:h-[400px]">
+              <Image alt="" fill src={ConfusedCat} quality={100} />
+            </div>
+          </div>
         ) : (
-          <p className="text-center">Nenhum animal encontrado.</p>
+          <SkeletonTheme baseColor="#cecece" highlightColor="#e6e6e6">
+            <div className="flex justify-between gap-[26px] flex-col lg:flex-row">
+              <Skeleton
+                className="w-full lg:w-[300px]"
+                height={288}
+                borderRadius={16}
+              />
+              <Skeleton
+                className="w-full lg:w-[300px]"
+                height={288}
+                borderRadius={16}
+              />
+              <Skeleton
+                className="w-full lg:w-[300px]"
+                height={288}
+                borderRadius={16}
+              />
+              <Skeleton
+                className="w-full lg:w-[300px]"
+                height={288}
+                borderRadius={16}
+              />
+            </div>
+          </SkeletonTheme>
         )}
       </main>
       <Footer />

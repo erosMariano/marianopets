@@ -2,12 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
-body,html, * {
+body,
+html,
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-body{
-  background-color: #FFFAF5;
+body {
+  background-color: #fffaf5;
+}
+
+
+.transparent-scrollbar::-webkit-scrollbar {
+  width: 0px;               /* width of the entire scrollbar */
+}
+.transparent-scrollbar::-webkit-scrollbar-thumb {
+  background-color: transparent;    /* color of the scroll thumb */
 }

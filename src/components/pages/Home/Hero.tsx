@@ -7,6 +7,7 @@ export const myFont = localFont({ src: "../fonts/MADE_Gentle.otf" });
 
 import ArrowButton from "../../../assets/images/icons/arrow-button.svg";
 import PataIcon from "../../../assets/images/icons/pata.svg";
+import Link from "next/link";
 
 export function Hero() {
   return (
@@ -38,10 +39,10 @@ export function Hero() {
             Descubra a felicidade de ter um pet e transforme sua vida para
             sempre.
           </p>
-          <button className="lg:w-fit mt-9 bg-[#8C62EC] hover:bg-purple-700 transition-all px-6 py-3 flex gap-3 items-center justify-center rounded-full text-base text-white font-medium">
+          <Link href={"/quero-adotar"} className="lg:w-fit mt-9 bg-[#8C62EC] hover:bg-purple-700 transition-all px-6 py-3 flex gap-3 items-center justify-center rounded-full text-base text-white font-medium">
             Adote agora
             <Image src={ArrowButton} alt="" />
-          </button>
+          </Link>
         </div>
 
         <div className="flex gap-2 justify-center w-auto items-start xl:w-1/3 lg:w-auto">
