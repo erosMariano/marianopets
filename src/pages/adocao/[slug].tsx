@@ -15,6 +15,8 @@ import { myFont } from "@/components/pages/Home/Hero";
 import ShareIcon from "../../assets/images/icons/share.svg";
 import ArrowButton from "../../assets/images/icons/arrow-button.svg";
 import Carousel from "@/components/Carousel";
+import PopupAdotar from "@/components/pages/PopupAdotar";
+import { useState } from "react";
 
 function Animal() {
   const slides = [
@@ -30,9 +32,13 @@ function Animal() {
       photoAnimal: AnimalImage3,
       id: 2,
     },
-
   ];
 
+  const [openModal, setOpenModal] = useState(false);
+
+  function changeModal(){
+    setOpenModal(prevState => !prevState)
+  }
   return (
     <>
       <Head>
@@ -46,6 +52,7 @@ function Animal() {
       </Head>
       <Header />
 
+      <PopupAdotar email="erosmariano1@gmail.com" isOpen={openModal} phone="11956649471" setIsOpen={changeModal}/>
       <main
         className={`${inter.className} flex-grow pb-10 mt-10 lg:mt-20 justify-between w-full max-w-[1312px] mx-auto px-4`}
       >
@@ -96,7 +103,7 @@ function Animal() {
                 </span>
               </div>
 
-              <button className="w-full my-6 gap-3 transition-all p-3 rounded-full font-semibold text-white  flex items-center justify-center bg-[#8C62EC] hover:bg-purple-700">
+              <button onClick={() => setOpenModal(true)} className="w-full my-6 gap-3 transition-all p-3 rounded-full font-semibold text-white  flex items-center justify-center bg-[#8C62EC] hover:bg-purple-700">
                 Entrar em contato
                 <Image src={ArrowButton} alt="" />
               </button>
