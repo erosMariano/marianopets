@@ -3,7 +3,7 @@ import React, { useState } from "react";
 
 interface CarouselProps {
   slides: {
-    photoAnimal: StaticImageData;
+    photoAnimal: string;
     id: number;
   }[];
 }
@@ -15,7 +15,6 @@ const Carousel = ({ slides }: CarouselProps) => {
     setCurrentSlide(index);
   };
 
-
   return (
     <div className="relative">
       {/* Slide atual em destaque */}
@@ -23,6 +22,10 @@ const Carousel = ({ slides }: CarouselProps) => {
         src={slides[currentSlide].photoAnimal}
         alt={`Slide ${slides[currentSlide].id}`}
         className="w-full object-cover h-[300px] rounded-2xl"
+        blurDataURL={slides[currentSlide].photoAnimal}
+        width={300}
+        height={300}
+        quality={100}
       />
 
       {/* Miniaturas dos slides */}
@@ -31,11 +34,13 @@ const Carousel = ({ slides }: CarouselProps) => {
           <button
             key={index}
             className={`h-20 w-20 mx-1 rounded-full focus:outline-none ${
-              index === currentSlide ? 'opacity-100' : 'opacity-50'
+              index === currentSlide ? "opacity-100" : "opacity-50"
             }`}
             onClick={() => handleSlideChange(index)}
           >
             <Image
+              width={80}
+              height={80}
               src={slide.photoAnimal}
               alt={`Slide ${slide.id}`}
               className="h-20 w-20 object-cover rounded-2xl"

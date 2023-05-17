@@ -16,28 +16,32 @@ import ShareIcon from "../../assets/images/icons/share.svg";
 import ArrowButton from "../../assets/images/icons/arrow-button.svg";
 import Carousel from "@/components/Carousel";
 import PopupAdotar from "@/components/pages/PopupAdotar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { api } from "../../../lib/axios";
 
 function Animal() {
   const slides = [
     {
-      photoAnimal: AnimalImage,
+      photoAnimal:
+        "https://firebasestorage.googleapis.com/v0/b/inductive-way-386721.appspot.com/o/files%2Ffeche-o-gato-fofo-dentro-de-casa.jpg?alt=media&token=bf1be04b-3144-42ab-861b-73ce130878e9",
       id: 0,
     },
     {
-      photoAnimal: AnimalImage2,
+      photoAnimal:
+        "https://firebasestorage.googleapis.com/v0/b/inductive-way-386721.appspot.com/o/files%2F04-09_gato_SITE.webp?alt=media&token=0d60abbd-a005-4749-80b7-6bfad4ad7a84",
       id: 1,
     },
     {
-      photoAnimal: AnimalImage3,
+      photoAnimal:
+        "https://firebasestorage.googleapis.com/v0/b/inductive-way-386721.appspot.com/o/files%2Fgato-e-mamifero-entenda-mais-sobre-a-especie.webp?alt=media&token=5b90469a-5479-4f7d-80cd-c66dce028814",
       id: 2,
     },
   ];
 
   const [openModal, setOpenModal] = useState(false);
 
-  function changeModal(){
-    setOpenModal(prevState => !prevState)
+  function changeModal() {
+    setOpenModal((prevState) => !prevState);
   }
   return (
     <>
@@ -52,7 +56,12 @@ function Animal() {
       </Head>
       <Header />
 
-      <PopupAdotar email="erosmariano1@gmail.com" isOpen={openModal} phone="11956649471" setIsOpen={changeModal}/>
+      <PopupAdotar
+        email="erosmariano1@gmail.com"
+        isOpen={openModal}
+        phone="11956649471"
+        setIsOpen={changeModal}
+      />
       <main
         className={`${inter.className} flex-grow pb-10 mt-10 lg:mt-20 justify-between w-full max-w-[1312px] mx-auto px-4`}
       >
@@ -103,7 +112,10 @@ function Animal() {
                 </span>
               </div>
 
-              <button onClick={() => setOpenModal(true)} className="w-full my-6 gap-3 transition-all p-3 rounded-full font-semibold text-white  flex items-center justify-center bg-[#8C62EC] hover:bg-purple-700">
+              <button
+                onClick={() => setOpenModal(true)}
+                className="w-full my-6 gap-3 transition-all p-3 rounded-full font-semibold text-white  flex items-center justify-center bg-[#8C62EC] hover:bg-purple-700"
+              >
                 Entrar em contato
                 <Image src={ArrowButton} alt="" />
               </button>
