@@ -34,6 +34,7 @@ export default async function handler(
         },
       });
 
+
       return res.status(201).json({ message: "Usuário criado" });
     } else {
       return res.status(409).json({ message: "Usuário já existente" });

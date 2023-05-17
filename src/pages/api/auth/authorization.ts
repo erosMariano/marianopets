@@ -1,9 +1,8 @@
+import jwt, { JwtPayload, verify } from "jsonwebtoken";
 import type { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
-import { JwtPayload, verify } from "jsonwebtoken";
 import { prisma } from "../../../../lib/prisma";
 const secretKey = process.env.JWT_SECRET;
 
-import jwt from "jsonwebtoken";
 
 export const authenticated =
   (fn: NextApiHandler) => async (req: NextApiRequest, res: NextApiResponse) => {

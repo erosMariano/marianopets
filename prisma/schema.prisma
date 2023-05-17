@@ -17,3 +17,17 @@ model User {
   password String
   phone    String
 }
+
+model Animal {
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
+  name    String
+  city    String
+  details String
+
+  tutorName  String
+  tutorEmail String
+  tutorPhone String
+
+  publishedAt DateTime
+  photos      String[]
+}
