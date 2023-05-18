@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { api } from "../../../lib/axios";
 import { getDownloadURL, listAll, ref, uploadBytes } from "firebase/storage";
 import storage from "@/config/firebase.config";
+import { authValidate } from "@/utils/authUtils";
 
 interface PropsFormDoacao {
   people: {
@@ -210,31 +211,5 @@ function FormDoacao({ people }: PropsFormDoacao) {
 export default FormDoacao;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const cookies = context.req.headers.cookie;
-
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/authorization`,
-    {
-      headers: {
-        Cookie: cookies!,
-      },
-    }
-  );
-
-  const people = await res.json();
-
-  if (res.status === 500 || !context.req) {
-    return {
-      redirect: {
-        destination: "/login", //
-        permanent: false,
-      },
-    };
-  }
-
-  return {
-    props: {
-      people,
-    },
-  };
+  return await authValidate(context);
 };
