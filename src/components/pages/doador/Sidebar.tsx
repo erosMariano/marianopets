@@ -17,7 +17,7 @@ function Sidebar({ activeMenu }: SidebarProps) {
     await api.put("/auth/login");
     await route.push("/login");
   }
-
+  
   return (
     <div className="flex flex-col flex-1">
       <nav className="bg-white flex flex-col w-80 shadow-sm rounded-lg flex-1 px-4 py-6 relative">

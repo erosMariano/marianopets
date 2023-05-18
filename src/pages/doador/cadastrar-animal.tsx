@@ -12,20 +12,14 @@ import SelectAnimal from "@/components/pages/doador/DropdownSelectAnimal";
 import UploadIcon from "../../assets/images/icons/upload.svg";
 import Image from "next/image";
 import { createFileList } from "@/utils/createFileList";
-/*
-  id      String @id @default(auto()) @map("_id") @db.ObjectId
-  name    String
-  city    String
-  details String
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { filterTypeAnimal } from "@/utils/filterTypeAnimal";
+import { ref, uploadBytes } from "firebase/storage";
+import storage from "@/config/firebase.config";
+import { api } from "../../../lib/axios";
 
-  tutorName  String
-  tutorEmail String
-  tutorPhone String
-
-  publishedAt DateTime
-  photos      String[]
-  type        String
-*/
 interface PropsFormDoacao {
   people: {
     id: string;
@@ -40,10 +34,51 @@ interface PreviewImageFrontEnd {
   urlImage: string;
   id: string;
 }
+
+const cadastroAnimalSchema = z.object({
+  name: z.string().min(3, { message: "Digite o nome do animal" }),
+  cidade: z
+    .string()
+    .min(4, { message: "Digite a cidade onde o animal se encontra" }),
+  details: z.string().min(1, { message: "Escreva detalhes sobre o animal" }),
+});
+
+type CadastroAnimalSchema = z.infer<typeof cadastroAnimalSchema>;
+
+interface RegisterAnimal {
+  name: string;
+  city: string;
+  details: string;
+  photos: string[];
+
+  tutorId?: string;
+  tutorName: string;
+  tutorEmail: string;
+  tutorPhone: string;
+  publishedAt: Date;
+  type: string;
+}
+
 function CadastrarAnimal({ people }: PropsFormDoacao) {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<CadastroAnimalSchema>({
+    resolver: zodResolver(cadastroAnimalSchema),
+  });
+
   const inputImageRef = useRef<HTMLInputElement>(null);
   const [imagePreview, setImagePreview] = useState<PreviewImageFrontEnd[]>([]);
   const [imagesFiles, setImagesFile] = useState<FileList | null>();
+  const [selectedItem, setSelectedItem] = useState("");
+
+  const [validationErrors, setValidationErrors] = useState({
+    animalType: true,
+    image: true,
+    activeForm: false,
+  });
 
   function selectImages() {
     if (!inputImageRef.current) return;
@@ -66,7 +101,6 @@ function CadastrarAnimal({ people }: PropsFormDoacao) {
     setImagePreview(imagesArray);
   }
 
-
   function removeImage(indexImage: string, position: number) {
     const updatedImagePreview = imagePreview.filter(
       (el) => el.id !== indexImage
@@ -78,6 +112,80 @@ function CadastrarAnimal({ people }: PropsFormDoacao) {
     setImagesFile(createFileList(updatedImagesFiles));
     setImagePreview(updatedImagePreview);
   }
+
+  async function FormSubmit(data: CadastroAnimalSchema) {
+    try {
+      if (imagesFiles) {
+        const referencePhotos = Array.from(imagesFiles).map((el) => {
+          return `/files/${el.name}`;
+        });
+
+        const dataForBD: RegisterAnimal = {
+          name: data.name,
+          city: data.cidade,
+          details: data.details,
+          type: filterTypeAnimal(selectedItem),
+          photos: referencePhotos,
+          publishedAt: new Date(),
+          tutorEmail: people.email,
+          tutorName: people.name,
+          tutorPhone: people.phone,
+          tutorId: people.id,
+        };
+        await api.post("/registerAnimal", dataForBD);
+        await uploadFileToFirebase()
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+
+  async function uploadFileToFirebase() {
+    try{
+      if(imagesFiles){
+        const uploadFiles = Array.from(imagesFiles)
+        for (let i = 0; i < uploadFiles.length; i++) {
+          try {
+            const imageRef = ref(storage, `/files/${uploadFiles[i].name}`);
+            const result = await uploadBytes(imageRef, uploadFiles[i]);
+            console.log("success");
+          } catch (error) {
+            console.log(error);
+          }
+        }
+      }
+    }catch(err){
+      alert(err)
+    }
+  }
+
+
+
+  // Limpar campos
+  //Adicionar toasty
+  //Limpar página cadastrar animal
+  
+
+
+  function validateSelectAndImages() {
+    setValidationErrors((prevState) => ({ ...prevState, activeForm: true }));
+  }
+
+  useEffect(() => {
+    if (imagePreview.length <= 0 && validationErrors.activeForm) {
+      setValidationErrors((prevState) => ({ ...prevState, image: false }));
+    } else {
+      setValidationErrors((prevState) => ({ ...prevState, image: true }));
+    }
+
+    if (selectedItem === "" && validationErrors.activeForm) {
+      setValidationErrors((prevState) => ({ ...prevState, animalType: false }));
+    } else {
+      setValidationErrors((prevState) => ({ ...prevState, animalType: true }));
+    }
+  }, [imagePreview.length, selectedItem, validationErrors.activeForm]);
+
 
   return (
     <>
@@ -93,26 +201,55 @@ function CadastrarAnimal({ people }: PropsFormDoacao) {
       >
         <Sidebar activeMenu="novo-animal" />
 
-        <form className="w-full flex flex-col gap-4">
-          <SelectAnimal />
+        <form
+          className="w-full flex flex-col gap-4"
+          onSubmit={handleSubmit(FormSubmit)}
+        >
+          <SelectAnimal
+            selectedItem={selectedItem}
+            setSelectedItem={setSelectedItem}
+          />
+
+          {!validationErrors.animalType && (
+            <span className="text-red-400 -mt-4 flex -mb-2 font-semibold">
+              Selecione um tipo de animal
+            </span>
+          )}
 
           <input
             type="text"
             className="w-full px-4 py-2 rounded-md border-gray-300 font-semibold outline-none transition-all border focus:border-yellow-500 text-gray-700"
-            required
             placeholder="Nome do animal"
+            {...register("name", { required: true })}
           />
+          {errors.name && (
+            <span className="text-red-400 -mt-4 flex -mb-2 font-semibold">
+              {errors.name.message}
+            </span>
+          )}
+
           <input
             type="text"
             className="w-full px-4 py-2 rounded-md border-gray-300 font-semibold outline-none transition-all border focus:border-yellow-500 text-gray-700"
-            required
             placeholder="Cidade do animal"
+            {...register("cidade", { required: true })}
           />
+          {errors.cidade && (
+            <span className="text-red-400 -mt-4 flex -mb-2 font-semibold">
+              {errors.cidade.message}
+            </span>
+          )}
+
           <textarea
             className="w-full resize-none px-4 py-2 h-44 rounded-md border-gray-300 font-semibold outline-none transition-all border focus:border-yellow-500 text-gray-700"
-            required
             placeholder="Detalhes sobre o animal"
+            {...register("details", { required: true })}
           />
+          {errors.details && (
+            <span className="text-red-400 -mt-4 flex -mb-2 font-semibold">
+              {errors.details.message}
+            </span>
+          )}
 
           <button
             type="button"
@@ -122,13 +259,18 @@ function CadastrarAnimal({ people }: PropsFormDoacao) {
             Upload foto animal
             <Image src={UploadIcon} width={24} height={24} alt="Icon upload" />
           </button>
+          {!validationErrors.image && (
+            <span className="text-red-400 -mt-4 flex -mb-2 font-semibold">
+              Faça upload de ao menos 1 foto
+            </span>
+          )}
           <input
             className="hidden"
             id="files"
             type="file"
+            name="files"
             multiple
             placeholder="Enter your city"
-            required
             accept="image/*"
             ref={inputImageRef}
             onChange={changeImageHandler}
@@ -161,6 +303,7 @@ function CadastrarAnimal({ people }: PropsFormDoacao) {
           <button
             className="w-full px-4 py-2 transition-all bg-orange-400 font-semibold text-white rounded-md hover:bg-orange-500 disabled:cursor-not-allowed disabled:bg-blue-950"
             type="submit"
+            onClick={validateSelectAndImages}
           >
             Cadastrar
           </button>

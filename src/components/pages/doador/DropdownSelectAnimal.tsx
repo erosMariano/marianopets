@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 
-function SelectAnimal() {
+interface SelectAnimalProps {
+  selectedItem: string;
+  setSelectedItem: React.Dispatch<React.SetStateAction<string>>;
+}
+function SelectAnimal({ selectedItem, setSelectedItem }: SelectAnimalProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedItem, setSelectedItem] = useState("");
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -13,7 +16,7 @@ function SelectAnimal() {
     setIsOpen(false);
   };
 
-  const items = ["Item 1", "Item 2", "Item 3"];
+  const items = ["Cachorro", "Gato", "Pássaro", "Peixe", "Roedor", "Réptil"];
 
   return (
     <div className="relative inline-block">
@@ -21,14 +24,16 @@ function SelectAnimal() {
         className="bg-white border border-gray-300 rounded-md p-2 cursor-pointer"
         onClick={toggleDropdown}
       >
-        <span className="mr-2">{selectedItem || "Selecione um tipo de animal"}</span>
+        <span className="mr-2 font-semibold text-gray-700">
+          {selectedItem || "Selecione um tipo de animal"}
+        </span>
       </div>
       {isOpen && (
-        <div className="absolute w-full z-10 bg-white border border-gray-300 mt-1 rounded-md shadow-md">
+        <div className="absolute w-full z-10 bg-white border border-gray-300 mt-1 rounded-md shadow-md font-semibold text-gray-700">
           {items.map((item, index) => (
             <div
               key={index}
-              className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+              className="px-4 py-2 hover:bg-gray-100 cursor-pointer font-semibold text-gray-700"
               onClick={() => handleItemClick(item)}
             >
               {item}
