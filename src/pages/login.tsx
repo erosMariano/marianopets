@@ -151,7 +151,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   if (cookiesValidate) {
     return {
       redirect: {
-        destination: "/doador/form-doacao",
+        destination: "/doador/",
         permanent: false,
       },
     };
