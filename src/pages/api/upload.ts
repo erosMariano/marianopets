@@ -12,53 +12,11 @@ const upload = multer({
 });
 
 export default async function handleUpload(req: any, res: any) {
-  if (req.method === "POST") {
-    try {
-      // Processa os arquivos enviados pelo Multer
-      upload.array("images", 1000)(req, res, async (error) => {
-        if (error) {
-          console.error("Error uploading images:", error);
-          return res.status(500).json({ message: "Error uploading images" });
-        }
-
-        const files = req.files as Express.Multer.File[];
-
-        if (!files || files.length === 0) {
-          return res.status(400).json({ message: "No images uploaded" });
-        }
-
-        const uploadPromises = files.map(async (file) => {
-          const storageRef = ref(storage, `/files/${file.originalname}`);
-
-          // Redimensiona a imagem para um tamanho desejado (por exemplo, 800x600)
-          const resizedImageBuffer = await sharp(file.buffer)
-            .resize(800, 600)
-            .toBuffer();
-
-          await uploadBytes(storageRef, resizedImageBuffer);
-
-          // Se necessário, você pode retornar a URL de download para o cliente
-          const downloadURL = await getDownloadURL(storageRef);
-          return downloadURL;
-        });
-
-        await Promise.all(uploadPromises);
-
-        return res
-          .status(200)
-          .json({ message: "Images uploaded successfully" });
-      });
-    } catch (error) {
-      console.error("Error uploading images:", error);
-      return res.status(500).json({ message: "Error uploading images" });
-    }
-  }
-
   if (req.method === "GET") {
     try {
       const imagesRef = ref(storage, "files");
-
       const { items } = await listAll(imagesRef);
+      
       
       const downloadUrls = await Promise.all(
         items.map(async (item) => {

@@ -29,7 +29,7 @@ interface ListItemFilter {
 }
 
 function NossoPets() {
-  // const [imagesFromAPI, setImagesFromAPI] = useState([]);
+  const [imagesFromAPI, setImagesFromAPI] = useState([]);
 
   // useEffect(() => {
   //   async function getImages() {
@@ -39,6 +39,9 @@ function NossoPets() {
   //   getImages();
   // }, []);
 
+  // useEffect(() =>{
+  //   console.log(imagesFromAPI)
+  // },[imagesFromAPI])
   const [itemActiveFilter, setItemActiveFilter] = useState(0);
   const [listItemFilter, setListItemFilter] = useState<ListItemFilter[]>([
     { type: "all", name: "Todos animais", active: true },

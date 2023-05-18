@@ -3,7 +3,6 @@ import type { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "../../../../lib/prisma";
 const secretKey = process.env.JWT_SECRET;
 
-
 export const authenticated =
   (fn: NextApiHandler) => async (req: NextApiRequest, res: NextApiResponse) => {
     try {
@@ -20,16 +19,21 @@ export default authenticated(async function getPeople(
 ) {
   try {
     if (req.cookies.authpetsmariano) {
-      const decoded = jwt.verify(req.cookies.authpetsmariano, String(secretKey)) as JwtPayload;
+      const decoded = jwt.verify(
+        req.cookies.authpetsmariano,
+        String(secretKey)
+      ) as JwtPayload;
 
       const existingUser = await prisma.user.findUnique({
         where: { email: decoded.emailUser },
       });
 
+      if (!existingUser) return;
       res.json({
-        email: existingUser?.email,
-        name: existingUser?.name,
-        phone: existingUser?.phone,
+        id: existingUser.id,
+        email: existingUser.email,
+        name: existingUser.name,
+        phone: existingUser.phone,
       });
     }
   } catch (error) {
