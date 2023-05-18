@@ -1,15 +1,6 @@
 import { ref, uploadBytes, listAll, getDownloadURL } from "firebase/storage";
-import multer from "multer";
 import storage from "@/config/firebase.config";
-import sharp from "sharp";
 
-// Configuração do Multer para armazenar os arquivos no disco
-const upload = multer({
-  dest: "uploads/",
-  limits: {
-    fileSize: 1000 * 1024 * 1024, // 10 MB
-  },
-});
 
 export default async function handleUpload(req: any, res: any) {
   if (req.method === "GET") {
