@@ -139,8 +139,8 @@ function CadastrarAnimal({ people }: PropsFormDoacao) {
           activeForm: false,
         }));
         setImagePreview([]);
-        // await api.post("/registerAnimal", dataForBD);
-        // await uploadFileToFirebase()
+        await api.post("/registerAnimal", dataForBD);
+        await uploadFileToFirebase()
         await toastActive(false);
       }
     } catch (error) {
