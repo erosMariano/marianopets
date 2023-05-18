@@ -42,7 +42,7 @@ function SignIn() {
   async function submitForm(user: LoginSchema) {
     try {
       await api.post("/auth/login", user);
-      await router.push("/doador/form-doacao");
+      await router.push("/doador/");
       reset();
     } catch (error) {
       if (axios.isAxiosError(error)) {

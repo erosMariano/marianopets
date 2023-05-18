@@ -3,8 +3,6 @@ import React, { useEffect, useRef, useState } from "react";
 const inter = Inter({ subsets: ["latin"] });
 import { Inter } from "next/font/google";
 import Sidebar from "@/components/pages/doador/Sidebar";
-import { myFont } from "@/components/pages/Home/Hero";
-import Link from "next/link";
 import { Footer } from "@/components/Footer";
 import { GetServerSideProps } from "next";
 import { authValidate } from "@/utils/authUtils";
@@ -19,6 +17,8 @@ import { filterTypeAnimal } from "@/utils/filterTypeAnimal";
 import { ref, uploadBytes } from "firebase/storage";
 import storage from "@/config/firebase.config";
 import { api } from "../../../lib/axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 interface PropsFormDoacao {
   people: {
@@ -132,60 +132,74 @@ function CadastrarAnimal({ people }: PropsFormDoacao) {
           tutorPhone: people.phone,
           tutorId: people.id,
         };
-        await api.post("/registerAnimal", dataForBD);
-        await uploadFileToFirebase()
+        reset();
+        setSelectedItem("");
+        setValidationErrors((prevState) => ({
+          ...prevState,
+          activeForm: false,
+        }));
+        setImagePreview([]);
+        // await api.post("/registerAnimal", dataForBD);
+        // await uploadFileToFirebase()
+        await toastActive(false);
       }
     } catch (error) {
       console.log(error);
+      toastActive(true);
     }
   }
-
 
   async function uploadFileToFirebase() {
-    try{
-      if(imagesFiles){
-        const uploadFiles = Array.from(imagesFiles)
+    try {
+      if (imagesFiles) {
+        const uploadFiles = Array.from(imagesFiles);
         for (let i = 0; i < uploadFiles.length; i++) {
-          try {
-            const imageRef = ref(storage, `/files/${uploadFiles[i].name}`);
-            const result = await uploadBytes(imageRef, uploadFiles[i]);
-            console.log("success");
-          } catch (error) {
-            console.log(error);
-          }
+          const imageRef = ref(storage, `/files/${uploadFiles[i].name}`);
+          await uploadBytes(imageRef, uploadFiles[i]);
         }
       }
-    }catch(err){
-      alert(err)
+    } catch (err) {
+      alert(err);
     }
   }
 
-
-
-  // Limpar campos
-  //Adicionar toasty
-  //Limpar página cadastrar animal
-  
-
+  async function toastActive(error: boolean) {
+    if (!error) {
+      toast.success(`Animal cadastrado`, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    } else {
+      toast.error(`Erro ao cadastrar animal`, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    }
+  }
 
   function validateSelectAndImages() {
     setValidationErrors((prevState) => ({ ...prevState, activeForm: true }));
   }
 
   useEffect(() => {
-    if (imagePreview.length <= 0 && validationErrors.activeForm) {
-      setValidationErrors((prevState) => ({ ...prevState, image: false }));
-    } else {
-      setValidationErrors((prevState) => ({ ...prevState, image: true }));
-    }
-
-    if (selectedItem === "" && validationErrors.activeForm) {
-      setValidationErrors((prevState) => ({ ...prevState, animalType: false }));
-    } else {
-      setValidationErrors((prevState) => ({ ...prevState, animalType: true }));
-    }
+    setValidationErrors((prevState) => ({
+      ...prevState,
+      image: imagePreview.length > 0 || !validationErrors.activeForm,
+      animalType: selectedItem !== "" || !validationErrors.activeForm,
+    }));
   }, [imagePreview.length, selectedItem, validationErrors.activeForm]);
-
 
   return (
     <>
@@ -196,6 +210,8 @@ function CadastrarAnimal({ people }: PropsFormDoacao) {
           content="Encontre seu companheiro perfeito para adoção no nosso site de adoção de animais. Temos cães, gatos e outros animais em busca de um lar amoroso. Visite-nos hoje para encontrar o amigo peludo ideal!"
         />
       </Head>
+      <ToastContainer />
+
       <main
         className={`${inter.className} flex flex-grow mt-10 lg:mt-20 justify-between w-full max-w-[1312px] mx-auto px-4 gap-6`}
       >
