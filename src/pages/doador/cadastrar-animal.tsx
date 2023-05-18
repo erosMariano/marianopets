@@ -84,11 +84,12 @@ function CadastrarAnimal({ people }: PropsFormDoacao) {
     if (!inputImageRef.current) return;
     inputImageRef.current.click();
   }
+  // Arrumar
 
   function changeImageHandler(e: React.ChangeEvent<HTMLInputElement>) {
     const selectedFiles = e.target.files;
-
     // Preview front-end
+
     const selectedFilesArray = Array.from(selectedFiles!);
     const imagesArray = selectedFilesArray.map((file, index) => {
       return {
@@ -97,9 +98,12 @@ function CadastrarAnimal({ people }: PropsFormDoacao) {
         urlImage: URL.createObjectURL(file),
       };
     });
+
     setImagesFile(selectedFiles);
     setImagePreview(imagesArray);
   }
+
+
 
   function removeImage(indexImage: string, position: number) {
     const updatedImagePreview = imagePreview.filter(
@@ -112,6 +116,7 @@ function CadastrarAnimal({ people }: PropsFormDoacao) {
     setImagesFile(createFileList(updatedImagesFiles));
     setImagePreview(updatedImagePreview);
   }
+
 
   async function FormSubmit(data: CadastroAnimalSchema) {
     try {
@@ -132,22 +137,26 @@ function CadastrarAnimal({ people }: PropsFormDoacao) {
           tutorPhone: people.phone,
           tutorId: people.id,
         };
-        reset();
-        setSelectedItem("");
         setValidationErrors((prevState) => ({
           ...prevState,
           activeForm: false,
         }));
-        setImagePreview([]);
         await api.post("/registerAnimal", dataForBD);
-        await uploadFileToFirebase()
+        await uploadFileToFirebase();
         await toastActive(false);
+        setImagePreview([]);
+        reset();
+        setSelectedItem("");
       }
     } catch (error) {
       console.log(error);
       toastActive(true);
     }
   }
+
+  useEffect(() =>{
+    console.log(imagesFiles)
+  })
 
   async function uploadFileToFirebase() {
     try {
@@ -317,11 +326,12 @@ function CadastrarAnimal({ people }: PropsFormDoacao) {
             <></>
           )}
           <button
-            className="w-full px-4 py-2 transition-all bg-orange-400 font-semibold text-white rounded-md hover:bg-orange-500 disabled:cursor-not-allowed disabled:bg-blue-950"
+            className="w-full px-4 py-2 transition-all bg-orange-400 font-semibold text-white rounded-md hover:bg-orange-500 disabled:cursor-not-allowed disabled:bg-orange-800"
             type="submit"
+            disabled={isSubmitting}
             onClick={validateSelectAndImages}
           >
-            Cadastrar
+            {!isSubmitting ? 'Cadastrar' : 'Cadastrando'}
           </button>
         </form>
       </main>

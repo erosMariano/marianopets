@@ -182,7 +182,7 @@ function SignUp() {
               )}
 
               <button
-                className="w-full px-4 py-2 transition-all bg-orange-400 font-semibold text-white rounded-md hover:bg-orange-500 disabled:cursor-not-allowed disabled:bg-blue-950"
+                className="w-full px-4 py-2 transition-all bg-orange-400 font-semibold text-white rounded-md hover:bg-orange-500 disabled:cursor-not-allowed disabled:bg-orange-800"
                 type="submit"
                 disabled={isSubmitting}
               >
