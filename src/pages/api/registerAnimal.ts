@@ -13,6 +13,7 @@ interface RegisterAnimal {
   tutorEmail: string;
   tutorPhone: string;
   publishedAt: Date;
+  type: string;
 }
 
 export default authenticated(async function RegisterAnimal(
@@ -29,6 +30,7 @@ export default authenticated(async function RegisterAnimal(
     tutorId,
     tutorName,
     tutorPhone,
+    type
   } = req.body as RegisterAnimal;
 
   const registerAnimalData: RegisterAnimal = {
@@ -40,6 +42,7 @@ export default authenticated(async function RegisterAnimal(
     tutorEmail: tutorEmail,
     tutorName: tutorName,
     tutorPhone: tutorPhone,
+    type: type
   };
 
   if (

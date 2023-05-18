@@ -47,7 +47,7 @@ function Sidebar({ activeMenu }: SidebarProps) {
 
           <li>
             <Link
-              href={"/doador/animais-cadastrados"}
+              href={"/doador/cadastrar-animal"}
               className={`font-semibold text-dark-text w-full block px-4 py-2 rounded-lg transition-all hover:bg-orange-300 ${
                 activeMenu === "novo-animal" && "bg-orange-200"
               }`}

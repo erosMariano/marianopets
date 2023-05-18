@@ -7,13 +7,23 @@ import Sidebar from "@/components/pages/doador/Sidebar";
 import { myFont } from "@/components/pages/Home/Hero";
 import Link from "next/link";
 import { GetServerSideProps } from "next";
+import { authValidate } from "@/utils/authUtils";
 const inter = Inter({ subsets: ["latin"] });
 
-function DoadorHome() {
+interface PropsFormDoacao {
+  people: {
+    id: string;
+    email: string;
+    name: string;
+    phone: string;
+  };
+}
+
+function DoadorHome({ people }: PropsFormDoacao) {
   return (
     <>
       <Head>
-        <title>Mariano Pets - Nossos Pets</title>
+        <title>Mariano Pets - Dashboard</title>
         <meta
           name="description"
           content="Encontre seu companheiro perfeito para adoção no nosso site de adoção de animais. Temos cães, gatos e outros animais em busca de um lar amoroso. Visite-nos hoje para encontrar o amigo peludo ideal!"
@@ -50,32 +60,5 @@ function DoadorHome() {
 export default DoadorHome;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const cookies = context.req.headers.cookie;
-
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/authorization`,
-    {
-      headers: {
-        Cookie: cookies!,
-      },
-    }
-  );
-
-  const people = await res.json();
-
-  if (res.status === 500 || !context.req) {
-    return {
-      redirect: {
-        destination: "/login", //
-        permanent: false,
-      },
-    };
-  }
-
-  return {
-    props: {
-      people,
-    },
-  };
+  return await authValidate(context);
 };
-
