@@ -20,6 +20,31 @@ import { api } from "../../../lib/axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+async function toastActive(error: boolean) {
+  if (!error) {
+    toast.success(`Animal cadastrado`, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+  } else {
+    toast.error(`Erro ao cadastrar animal`, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+  }
+}
 interface PropsFormDoacao {
   people: {
     id: string;
@@ -34,12 +59,8 @@ interface PreviewImageFrontEnd {
   urlImage: string;
   id: string;
 }
-
 const cadastroAnimalSchema = z.object({
   name: z.string().min(3, { message: "Digite o nome do animal" }),
-  cidade: z
-    .string()
-    .min(4, { message: "Digite a cidade onde o animal se encontra" }),
   details: z.string().min(1, { message: "Escreva detalhes sobre o animal" }),
 });
 
@@ -73,23 +94,29 @@ function CadastrarAnimal({ people }: PropsFormDoacao) {
   const [imagePreview, setImagePreview] = useState<PreviewImageFrontEnd[]>([]);
   const [imagesFiles, setImagesFile] = useState<FileList | null>();
   const [selectedItem, setSelectedItem] = useState("");
+  const [enderecoCEP, setEnderecoCEP] = useState({
+    cep: "",
+    bairro: "",
+    localidade: "",
+    activeInput: false,
+    error: false,
+  });
 
   const [validationErrors, setValidationErrors] = useState({
     animalType: true,
     image: true,
     activeForm: false,
+    cep: false,
   });
 
   function selectImages() {
     if (!inputImageRef.current) return;
     inputImageRef.current.click();
   }
-  // Arrumar
 
-  function changeImageHandler(e: React.ChangeEvent<HTMLInputElement>) {
+  // Preview front-end
+  function createPreviewFrontEnd(e: React.ChangeEvent<HTMLInputElement>) {
     const selectedFiles = e.target.files;
-    // Preview front-end
-
     const selectedFilesArray = Array.from(selectedFiles!);
     const imagesArray = selectedFilesArray.map((file, index) => {
       return {
@@ -103,8 +130,6 @@ function CadastrarAnimal({ people }: PropsFormDoacao) {
     setImagePreview(imagesArray);
   }
 
-
-
   function removeImage(indexImage: string, position: number) {
     const updatedImagePreview = imagePreview.filter(
       (el) => el.id !== indexImage
@@ -117,17 +142,16 @@ function CadastrarAnimal({ people }: PropsFormDoacao) {
     setImagePreview(updatedImagePreview);
   }
 
-
   async function FormSubmit(data: CadastroAnimalSchema) {
     try {
-      if (imagesFiles) {
+      if (imagesFiles && !enderecoCEP.error) {
         const referencePhotos = Array.from(imagesFiles).map((el) => {
           return `/files/${el.name}`;
         });
 
         const dataForBD: RegisterAnimal = {
           name: data.name,
-          city: data.cidade,
+          city: enderecoCEP.localidade,
           details: data.details,
           type: filterTypeAnimal(selectedItem),
           photos: referencePhotos,
@@ -144,19 +168,13 @@ function CadastrarAnimal({ people }: PropsFormDoacao) {
         await api.post("/registerAnimal", dataForBD);
         await uploadFileToFirebase();
         await toastActive(false);
-        setImagePreview([]);
-        reset();
-        setSelectedItem("");
+        resetFieldsInputs()
       }
     } catch (error) {
       console.log(error);
       toastActive(true);
     }
   }
-
-  useEffect(() =>{
-    console.log(imagesFiles)
-  })
 
   async function uploadFileToFirebase() {
     try {
@@ -172,43 +190,75 @@ function CadastrarAnimal({ people }: PropsFormDoacao) {
     }
   }
 
-  async function toastActive(error: boolean) {
-    if (!error) {
-      toast.success(`Animal cadastrado`, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
-    } else {
-      toast.error(`Erro ao cadastrar animal`, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
-    }
-  }
-
   function validateSelectAndImages() {
     setValidationErrors((prevState) => ({ ...prevState, activeForm: true }));
   }
 
+  async function getCEPAnimal(e: React.ChangeEvent<HTMLInputElement>) {
+    const { value } = e.target;
+    //Formatar CEP
+    // Remove todos os caracteres não numéricos
+    const numericValue = value.replace(/\D/g, "");
+    // Verifica se o CEP tem mais de 8 dígitos
+    if (numericValue.length > 8) {
+      return;
+    }
+    // Aplica a máscara de CEP (#####-###)
+    const formattedCep = numericValue.replace(/^(\d{5})(\d)/, "$1-$2");
+    setEnderecoCEP((prevState) => ({ ...prevState, cep: formattedCep }));
+
+    if (numericValue.length === 8) {
+      setEnderecoCEP((prevState) => ({ ...prevState, activeInput: true }));
+
+      try {
+        const res = await fetch(
+          `https://viacep.com.br/ws/${numericValue}/json/`
+        );
+        const result = await res.json();
+
+        if (!result.erro) {
+          setEnderecoCEP((prevState) => ({
+            ...prevState,
+            localidade: result.localidade,
+            error: false,
+          }));
+        } else {
+          setEnderecoCEP((prevState) => ({
+            ...prevState,
+            localidade: "",
+            error: true,
+          }));
+        }
+      } catch (error) {
+        console.log("oiii")
+      } finally {
+        setEnderecoCEP((prevState) => ({ ...prevState, activeInput: false }));
+      }
+    }
+  }
+
+  function resetFieldsInputs(){
+    setImagePreview([]);
+    reset();
+    setSelectedItem("");
+    setEnderecoCEP((prevState) => ({...prevState, cep: "",  localidade: ""}))
+  }
   useEffect(() => {
     setValidationErrors((prevState) => ({
       ...prevState,
       image: imagePreview.length > 0 || !validationErrors.activeForm,
       animalType: selectedItem !== "" || !validationErrors.activeForm,
+      cep:
+        (enderecoCEP.localidade.length < 8 && validationErrors.activeForm) ||
+        enderecoCEP.error,
     }));
-  }, [imagePreview.length, selectedItem, validationErrors.activeForm]);
+  }, [
+    enderecoCEP.error,
+    enderecoCEP.localidade,
+    imagePreview.length,
+    selectedItem,
+    validationErrors.activeForm,
+  ]);
 
   return (
     <>
@@ -256,14 +306,24 @@ function CadastrarAnimal({ people }: PropsFormDoacao) {
           <input
             type="text"
             className="w-full px-4 py-2 rounded-md border-gray-300 font-semibold outline-none transition-all border focus:border-yellow-500 text-gray-700"
-            placeholder="Cidade do animal"
-            {...register("cidade", { required: true })}
+            placeholder="Digite o CEP onde reside o animal"
+            onChange={(e) => getCEPAnimal(e)}
+            value={enderecoCEP.cep}
+            disabled={enderecoCEP.activeInput}
           />
-          {errors.cidade && (
+          {validationErrors.cep && (
             <span className="text-red-400 -mt-4 flex -mb-2 font-semibold">
-              {errors.cidade.message}
+              Digite um CEP válido
             </span>
           )}
+
+          <input
+            type="text"
+            className="w-full px-4 py-2 rounded-md border-gray-300 font-semibold outline-none transition-all border focus:border-yellow-500 text-gray-700"
+            placeholder="Cidade do animal"
+            disabled
+            value={enderecoCEP.localidade}
+          />
 
           <textarea
             className="w-full resize-none px-4 py-2 h-44 rounded-md border-gray-300 font-semibold outline-none transition-all border focus:border-yellow-500 text-gray-700"
@@ -298,7 +358,7 @@ function CadastrarAnimal({ people }: PropsFormDoacao) {
             placeholder="Enter your city"
             accept="image/*"
             ref={inputImageRef}
-            onChange={changeImageHandler}
+            onChange={createPreviewFrontEnd}
           />
 
           {imagePreview[0] !== undefined ? (
@@ -331,7 +391,7 @@ function CadastrarAnimal({ people }: PropsFormDoacao) {
             disabled={isSubmitting}
             onClick={validateSelectAndImages}
           >
-            {!isSubmitting ? 'Cadastrar' : 'Cadastrando'}
+            {!isSubmitting ? "Cadastrar" : "Cadastrando"}
           </button>
         </form>
       </main>
