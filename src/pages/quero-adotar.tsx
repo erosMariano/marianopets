@@ -141,8 +141,8 @@ function NossoPets() {
             <p className={`${myFont.className} text-dark-blue text-2xl`}>
               Nenhum animal encontrado.
             </p>
-            <div className="relative w-[300px] h-[300px] 2xl:w-[400px] 2xl:h-[400px]">
-              <Image alt="" fill src={ConfusedCat} quality={100} priority />
+            <div className="relative w-[300px] h-[300px]">
+              <Image alt="" src={ConfusedCat} width={300} height={300} quality={100} priority/>
             </div>
           </div>
         ) : (

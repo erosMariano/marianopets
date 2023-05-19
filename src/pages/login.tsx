@@ -65,7 +65,7 @@ function SignIn() {
       </Head>
 
       <Header />
-      <main className="max-w-[1312px] mx-auto px-4 mt-20 pb-20">
+      <main className="max-w-[1312px] mx-auto px-4 mt-20 pb-20 w-full">
         <div className="bg-white w-full rounded-2xl shadow-sm flex overflow-hidden">
           <div className="w-2/5 h-[456px]  lg:flex hidden">
             <Image
