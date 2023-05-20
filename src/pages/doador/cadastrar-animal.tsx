@@ -1,5 +1,5 @@
 import Head from "next/head";
-import React, { useEffect, useRef, useState } from "react";
+import React, { Suspense, useEffect, useRef, useState } from "react";
 const inter = Inter({ subsets: ["latin"] });
 import { Inter } from "next/font/google";
 import Sidebar from "@/components/pages/doador/Sidebar";
@@ -19,6 +19,7 @@ import storage from "@/config/firebase.config";
 import { api } from "../../../lib/axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Loading from "@/components/Loading";
 
 async function toastActive(error: boolean) {
   if (!error) {
@@ -168,7 +169,7 @@ function CadastrarAnimal({ people }: PropsFormDoacao) {
         await api.post("/registerAnimal", dataForBD);
         await uploadFileToFirebase();
         await toastActive(false);
-        resetFieldsInputs()
+        resetFieldsInputs();
       }
     } catch (error) {
       console.log(error);
@@ -230,18 +231,18 @@ function CadastrarAnimal({ people }: PropsFormDoacao) {
           }));
         }
       } catch (error) {
-        console.log("oiii")
+        console.log("oiii");
       } finally {
         setEnderecoCEP((prevState) => ({ ...prevState, activeInput: false }));
       }
     }
   }
 
-  function resetFieldsInputs(){
+  function resetFieldsInputs() {
     setImagePreview([]);
     reset();
     setSelectedItem("");
-    setEnderecoCEP((prevState) => ({...prevState, cep: "",  localidade: ""}))
+    setEnderecoCEP((prevState) => ({ ...prevState, cep: "", localidade: "" }));
   }
   useEffect(() => {
     setValidationErrors((prevState) => ({
@@ -271,131 +272,136 @@ function CadastrarAnimal({ people }: PropsFormDoacao) {
       </Head>
       <ToastContainer />
 
-      <main
-        className={`${inter.className} flex flex-grow mt-10 lg:mt-20 justify-between w-full max-w-[1312px] mx-auto px-4 gap-6`}
-      >
-        <Sidebar activeMenu="novo-animal" />
-
-        <form
-          className="w-full flex flex-col gap-4"
-          onSubmit={handleSubmit(FormSubmit)}
+        <main
+          className={`${inter.className} flex flex-grow mt-10 lg:mt-20 justify-between w-full max-w-[1312px] mx-auto px-4 gap-6`}
         >
-          <SelectAnimal
-            selectedItem={selectedItem}
-            setSelectedItem={setSelectedItem}
-          />
+          <Sidebar activeMenu="novo-animal" />
 
-          {!validationErrors.animalType && (
-            <span className="text-red-400 -mt-4 flex -mb-2 font-semibold">
-              Selecione um tipo de animal
-            </span>
-          )}
-
-          <input
-            type="text"
-            className="w-full px-4 py-2 rounded-md border-gray-300 font-semibold outline-none transition-all border focus:border-yellow-500 text-gray-700"
-            placeholder="Nome do animal"
-            {...register("name", { required: true })}
-          />
-          {errors.name && (
-            <span className="text-red-400 -mt-4 flex -mb-2 font-semibold">
-              {errors.name.message}
-            </span>
-          )}
-
-          <input
-            type="text"
-            className="w-full px-4 py-2 rounded-md border-gray-300 font-semibold outline-none transition-all border focus:border-yellow-500 text-gray-700"
-            placeholder="Digite o CEP onde reside o animal"
-            onChange={(e) => getCEPAnimal(e)}
-            value={enderecoCEP.cep}
-            disabled={enderecoCEP.activeInput}
-          />
-          {validationErrors.cep && (
-            <span className="text-red-400 -mt-4 flex -mb-2 font-semibold">
-              Digite um CEP válido
-            </span>
-          )}
-
-          <input
-            type="text"
-            className="w-full px-4 py-2 rounded-md border-gray-300 font-semibold outline-none transition-all border focus:border-yellow-500 text-gray-700"
-            placeholder="Cidade do animal"
-            disabled
-            value={enderecoCEP.localidade}
-          />
-
-          <textarea
-            className="w-full resize-none px-4 py-2 h-44 rounded-md border-gray-300 font-semibold outline-none transition-all border focus:border-yellow-500 text-gray-700"
-            placeholder="Detalhes sobre o animal"
-            {...register("details", { required: true })}
-          />
-          {errors.details && (
-            <span className="text-red-400 -mt-4 flex -mb-2 font-semibold">
-              {errors.details.message}
-            </span>
-          )}
-
-          <button
-            type="button"
-            onClick={selectImages}
-            className="flex gap-4 text-left w-full px-4 py-2 rounded-md border-gray-300 font-semibold outline-none transition-all border focus:border-yellow-500 text-gray-700 bg-white"
+          <form
+            className="w-full flex flex-col gap-4"
+            onSubmit={handleSubmit(FormSubmit)}
           >
-            Upload foto animal
-            <Image src={UploadIcon} width={24} height={24} alt="Icon upload" />
-          </button>
-          {!validationErrors.image && (
-            <span className="text-red-400 -mt-4 flex -mb-2 font-semibold">
-              Faça upload de ao menos 1 foto
-            </span>
-          )}
-          <input
-            className="hidden"
-            id="files"
-            type="file"
-            name="files"
-            multiple
-            placeholder="Enter your city"
-            accept="image/*"
-            ref={inputImageRef}
-            onChange={createPreviewFrontEnd}
-          />
+            <SelectAnimal
+              selectedItem={selectedItem}
+              setSelectedItem={setSelectedItem}
+            />
 
-          {imagePreview[0] !== undefined ? (
-            <div className="flex gap-4 flex-wrap">
-              {imagePreview.map(({ urlImage, id }, position) => (
-                <div key={id}>
-                  <Image
-                    src={urlImage}
-                    alt=""
-                    width={100}
-                    height={100}
-                    style={{ objectFit: "cover" }}
-                  />
-                  <button
-                    type="button"
-                    className="bg-red-400 text-white rounded-sm text-xs w-full py-1"
-                    onClick={() => removeImage(id, position)}
-                  >
-                    deletar
-                  </button>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <></>
-          )}
-          <button
-            className="w-full px-4 py-2 transition-all bg-orange-400 font-semibold text-white rounded-md hover:bg-orange-500 disabled:cursor-not-allowed disabled:bg-orange-800"
-            type="submit"
-            disabled={isSubmitting}
-            onClick={validateSelectAndImages}
-          >
-            {!isSubmitting ? "Cadastrar" : "Cadastrando"}
-          </button>
-        </form>
-      </main>
-      <Footer />
+            {!validationErrors.animalType && (
+              <span className="text-red-400 -mt-4 flex -mb-2 font-semibold">
+                Selecione um tipo de animal
+              </span>
+            )}
+
+            <input
+              type="text"
+              className="w-full px-4 py-2 rounded-md border-gray-300 font-semibold outline-none transition-all border focus:border-yellow-500 text-gray-700"
+              placeholder="Nome do animal"
+              {...register("name", { required: true })}
+            />
+            {errors.name && (
+              <span className="text-red-400 -mt-4 flex -mb-2 font-semibold">
+                {errors.name.message}
+              </span>
+            )}
+
+            <input
+              type="text"
+              className="w-full px-4 py-2 rounded-md border-gray-300 font-semibold outline-none transition-all border focus:border-yellow-500 text-gray-700"
+              placeholder="Digite o CEP onde reside o animal"
+              onChange={(e) => getCEPAnimal(e)}
+              value={enderecoCEP.cep}
+              disabled={enderecoCEP.activeInput}
+            />
+            {validationErrors.cep && (
+              <span className="text-red-400 -mt-4 flex -mb-2 font-semibold">
+                Digite um CEP válido
+              </span>
+            )}
+
+            <input
+              type="text"
+              className="w-full px-4 py-2 rounded-md border-gray-300 font-semibold outline-none transition-all border focus:border-yellow-500 text-gray-700"
+              placeholder="Cidade do animal"
+              disabled
+              value={enderecoCEP.localidade}
+            />
+
+            <textarea
+              className="w-full resize-none px-4 py-2 h-44 rounded-md border-gray-300 font-semibold outline-none transition-all border focus:border-yellow-500 text-gray-700"
+              placeholder="Detalhes sobre o animal"
+              {...register("details", { required: true })}
+            />
+            {errors.details && (
+              <span className="text-red-400 -mt-4 flex -mb-2 font-semibold">
+                {errors.details.message}
+              </span>
+            )}
+
+            <button
+              type="button"
+              onClick={selectImages}
+              className="flex gap-4 text-left w-full px-4 py-2 rounded-md border-gray-300 font-semibold outline-none transition-all border focus:border-yellow-500 text-gray-700 bg-white"
+            >
+              Upload foto animal
+              <Image
+                src={UploadIcon}
+                width={24}
+                height={24}
+                alt="Icon upload"
+              />
+            </button>
+            {!validationErrors.image && (
+              <span className="text-red-400 -mt-4 flex -mb-2 font-semibold">
+                Faça upload de ao menos 1 foto
+              </span>
+            )}
+            <input
+              className="hidden"
+              id="files"
+              type="file"
+              name="files"
+              multiple
+              placeholder="Enter your city"
+              accept="image/*"
+              ref={inputImageRef}
+              onChange={createPreviewFrontEnd}
+            />
+
+            {imagePreview[0] !== undefined ? (
+              <div className="flex gap-4 flex-wrap">
+                {imagePreview.map(({ urlImage, id }, position) => (
+                  <div key={id}>
+                    <Image
+                      src={urlImage}
+                      alt=""
+                      width={100}
+                      height={100}
+                      style={{ objectFit: "cover" }}
+                    />
+                    <button
+                      type="button"
+                      className="bg-red-400 text-white rounded-sm text-xs w-full py-1"
+                      onClick={() => removeImage(id, position)}
+                    >
+                      deletar
+                    </button>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <></>
+            )}
+            <button
+              className="w-full px-4 py-2 transition-all bg-orange-400 font-semibold text-white rounded-md hover:bg-orange-500 disabled:cursor-not-allowed disabled:bg-orange-800"
+              type="submit"
+              disabled={isSubmitting}
+              onClick={validateSelectAndImages}
+            >
+              {!isSubmitting ? "Cadastrar" : "Cadastrando"}
+            </button>
+          </form>
+        </main>
+        <Footer />
     </>
   );
 }
