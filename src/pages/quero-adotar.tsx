@@ -1,9 +1,9 @@
 import Head from "next/head";
 import React, { useEffect, useState } from "react";
 import { Inter } from "next/font/google";
+const inter = Inter({ subsets: ["latin"] });
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-const inter = Inter({ subsets: ["latin"] });
 
 import Animal from "../assets/images/adote-cao.png";
 import Animal2 from "../assets/images/portrait-adorable-cat.png";

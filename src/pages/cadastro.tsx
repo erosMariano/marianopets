@@ -7,16 +7,16 @@ import InputMask from "react-input-mask";
 import { z } from "zod";
 
 import Head from "next/head";
+import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useEffect, useRef } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useRouter } from "next/router";
-import Image from "next/image";
 
-import ImageDogs from "../assets/images/beagles-filhotes-bocejando.jpg";
-import { myFont } from "@/components/pages/Home/Hero";
 import { Header } from "@/components/Header";
+import { myFont } from "@/components/pages/Home/Hero";
+import ImageDogs from "../assets/images/beagles-filhotes-bocejando.jpg";
 
 //remove os caracteres que não são números
 const phoneSchema = z
@@ -207,3 +207,5 @@ function SignUp() {
 }
 
 export default SignUp;
+
+

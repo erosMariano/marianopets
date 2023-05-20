@@ -33,6 +33,6 @@ model Animal {
   photos      String[]
   type        String
 
-  tutorId String @db.ObjectId
+  tutorId String @unique @db.ObjectId
   user    User?  @relation(fields: [tutorId], references: [id])
 }
