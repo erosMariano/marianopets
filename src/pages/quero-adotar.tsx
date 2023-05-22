@@ -51,31 +51,39 @@ function NossoPets() {
 
   useEffect(() => {
     async function fetchData() {
-      const {
-        data: { animals },
-      } = await api.get("/getAllAnimals");
-  
-      const myAnimals = animals as AnimalData[];
-      const filesAnimalsRefs = myAnimals.map((animal) => animal.photos[0]);
-      await fetchImages(filesAnimalsRefs, myAnimals);
+      try {
+        const {
+          data: { animals },
+        } = await api.get("/getAllAnimals");
+
+        const myAnimals = animals as AnimalData[];
+        const filesAnimalsRefs = myAnimals.map((animal) => animal.photos[0]);
+        await fetchImages(filesAnimalsRefs, myAnimals);
+      } catch (error) {
+        console.log(error);
+      }
     }
-  
+
     async function fetchImages(items: string[], animals: AnimalData[]) {
-      const updatedAnimals = await Promise.all(
-        items.map(async (path, index) => {
-          const fileRef = ref(storage, path);
-          const downloadURL = await getDownloadURL(fileRef);
-  
-          return {
-            ...animals[index],
-            image: [downloadURL],
-          };
-        })
-      );
-  
-      setAnimalsData(updatedAnimals);
+      try {
+        const updatedAnimals = await Promise.all(
+          items.map(async (path, index) => {
+            const fileRef = ref(storage, path);
+            const downloadURL = await getDownloadURL(fileRef);
+
+            return {
+              ...animals[index],
+              image: [downloadURL],
+            };
+          })
+        );
+
+        setAnimalsData(updatedAnimals);
+      } catch (error) {
+        console.log(error);
+      }
     }
-  
+
     fetchData();
   }, []);
 
@@ -126,7 +134,7 @@ function NossoPets() {
                   className="flex flex-col relative w-full  md:w-[48%] lg:w-[300px] overflow-hidden shadow-sm hover:shadow-md rounded-2xl    transition-all"
                 >
                   <>
-                    {!filteredAnimals[index].image  ? (
+                    {!filteredAnimals[index].image ? (
                       <div className="animate-pulse flex-row items-center flex justify-between w-full flex-wrap gap-[26px]">
                         <div className="w-full h-[200px] bg-gray-300 block"></div>
                       </div>
