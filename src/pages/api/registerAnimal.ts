@@ -15,6 +15,7 @@ interface RegisterAnimal {
   publishedAt: Date;
   type: string;
   CEP: string;
+  state: string;
 }
 
 export default authenticated(async function RegisterAnimal(
@@ -32,7 +33,8 @@ export default authenticated(async function RegisterAnimal(
     tutorName,
     tutorPhone,
     type,
-    CEP
+    CEP,
+    state
   } = req.body as RegisterAnimal;
 
   const registerAnimalData: RegisterAnimal = {
@@ -45,7 +47,8 @@ export default authenticated(async function RegisterAnimal(
     tutorName: tutorName,
     tutorPhone: tutorPhone,
     type: type,
-    CEP: CEP
+    CEP: CEP,
+    state: state,
   };
 
   if (

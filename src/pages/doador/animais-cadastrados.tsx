@@ -40,6 +40,7 @@ interface AnimalCadastrado {
 }
 
 function AnimaisCadastrados({ dataAnimal }: AnimalCadastrado) {
+  const [listAnimal, setListAnimal] = useState(dataAnimal)
   const [idsDeleted, setIdDeleted] = useState<string[]>([]);
   const [isSaving, setIsSaving] = useState(false);
 
@@ -53,11 +54,8 @@ function AnimaisCadastrados({ dataAnimal }: AnimalCadastrado) {
     });
   }
 
-  useEffect(() => {
-    console.log(idsDeleted);
-  }, [idsDeleted]);
   async function handleModifyData() {
-    if (dataAnimal.length !== 0 && idsDeleted.length !== 0) {
+    if (listAnimal.length !== 0 && idsDeleted.length !== 0) {
       try {
         setIsSaving(true);
         const res = await api.delete("/upload", {
@@ -68,7 +66,9 @@ function AnimaisCadastrados({ dataAnimal }: AnimalCadastrado) {
         if (res.status === 200) {
           await toastActive({ error: false, message: "Animal deletado" });
           setIsSaving(false);
+          updateListedAnimal()
           setIdDeleted([]);
+          
         }
       } catch (error) {
         await toastActive({ error: true, message: "Erro ao deletar animal" });
@@ -76,6 +76,11 @@ function AnimaisCadastrados({ dataAnimal }: AnimalCadastrado) {
     } else {
       await toastActive({ error: true, message: "Sem registros para deletar" });
     }
+  }
+
+  function updateListedAnimal(){
+    const updateListFilter = listAnimal.filter((el, index) => el.id !== idsDeleted[index])
+    setListAnimal(updateListFilter)
   }
   return (
     <>
@@ -93,8 +98,8 @@ function AnimaisCadastrados({ dataAnimal }: AnimalCadastrado) {
         <Sidebar activeMenu="animais-cadastrados" />
         <div className="w-full">
           <div className="flex gap-3 items-start flex-col">
-            {dataAnimal.length >= 1 ? (
-              dataAnimal.map(({ id, name, city, details, photos }) => (
+            {listAnimal.length >= 1 ? (
+              listAnimal.map(({ id, name, city, details, photos }) => (
                 <CardAnimal
                   setDeletePet={handleDeletePet}
                   city={city}

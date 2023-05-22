@@ -5,9 +5,6 @@ const inter = Inter({ subsets: ["latin"] });
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 
-import Animal from "../assets/images/adote-cao.png";
-import Animal2 from "../assets/images/portrait-adorable-cat.png";
-
 import Image, { StaticImageData } from "next/image";
 import { api } from "../../lib/axios";
 import Link from "next/link";
@@ -15,6 +12,9 @@ import { convertStringInSlug } from "@/utils/convertStringInSlug";
 import ConfusedCat from "../assets/images/confusedCat.png";
 import { myFont } from "@/components/pages/Home/Hero";
 import FilterQueroAdotar from "@/components/pages/quero-adotar/Filter";
+import { getStorage, ref, getDownloadURL } from "firebase/storage";
+
+import storage from "@/config/firebase.config";
 
 interface AnimalContent {
   imageUrl: string | StaticImageData;
@@ -28,20 +28,57 @@ interface ListItemFilter {
   active: boolean;
 }
 
+interface AnimalData {
+  name: string;
+  city: string;
+  details: string;
+  photos: string[];
+
+  tutorId?: string;
+  tutorName: string;
+  tutorEmail: string;
+  tutorPhone: string;
+  publishedAt: Date;
+  type: string;
+  CEP: string;
+  state: string;
+
+  image: string[];
+}
+
 function NossoPets() {
-  const [imagesFromAPI, setImagesFromAPI] = useState([]);
+  const [animalsData, setAnimalsData] = useState<AnimalData[]>([]);
 
-  // useEffect(() => {
-  //   async function getImages() {
-  //     const { data } = await api.get("/upload");
-  //     setImagesFromAPI(data.urls);
-  //   }
-  //   getImages();
-  // }, []);
+  useEffect(() => {
+    async function fetchData() {
+      const {
+        data: { animals },
+      } = await api.get("/getAllAnimals");
+  
+      const myAnimals = animals as AnimalData[];
+      const filesAnimalsRefs = myAnimals.map((animal) => animal.photos[0]);
+      await fetchImages(filesAnimalsRefs, myAnimals);
+    }
+  
+    async function fetchImages(items: string[], animals: AnimalData[]) {
+      const updatedAnimals = await Promise.all(
+        items.map(async (path, index) => {
+          const fileRef = ref(storage, path);
+          const downloadURL = await getDownloadURL(fileRef);
+  
+          return {
+            ...animals[index],
+            image: [downloadURL],
+          };
+        })
+      );
+  
+      setAnimalsData(updatedAnimals);
+    }
+  
+    fetchData();
+  }, []);
 
-  // useEffect(() =>{
-  //   console.log(imagesFromAPI)
-  // },[imagesFromAPI])
   const [itemActiveFilter, setItemActiveFilter] = useState(0);
   const [listItemFilter, setListItemFilter] = useState<ListItemFilter[]>([
     { type: "all", name: "Todos animais", active: true },
@@ -53,35 +90,7 @@ function NossoPets() {
     { type: "reptile", name: "Réptil", active: false },
   ]);
 
-  const [listAnimals, setListAnimals] = useState<AnimalContent[]>([
-    {
-      imageUrl: Animal,
-      type: "dog",
-      name: "Cachorro fábio",
-      localization: "Embu-Guaçu, SP",
-    },
-    {
-      imageUrl: Animal2,
-      type: "cat",
-      name: "Gato fabricio",
-      localization: "Embu-Guaçu, SP",
-    },
-    {
-      imageUrl: Animal2,
-      type: "cat",
-      name: "Gato fabricio",
-      localization: "Embu-Guaçu, SP",
-    },
-
-    {
-      imageUrl: Animal2,
-      type: "cat",
-      name: "Gato fabricio",
-      localization: "Embu-Guaçu, SP",
-    },
-  ]);
-
-  const filteredAnimals = listAnimals.filter((el) => {
+  const filteredAnimals = animalsData.filter((el) => {
     return (
       listItemFilter[itemActiveFilter].type === "all" ||
       el.type === listItemFilter[itemActiveFilter].type
@@ -107,7 +116,7 @@ function NossoPets() {
           listItemFilter={listItemFilter}
         />
 
-        {filteredAnimals.length > 0 ? (
+        {filteredAnimals.length >= 1 ? (
           <div className="flex flex-wrap gap-[26px]">
             {filteredAnimals.map((el, index) => {
               return (
@@ -117,18 +126,26 @@ function NossoPets() {
                   className="flex flex-col relative w-full  md:w-[48%] lg:w-[300px] overflow-hidden shadow-sm hover:shadow-md rounded-2xl    transition-all"
                 >
                   <>
-                    <Image
-                      src={el.imageUrl}
-                      alt=""
-                      className="w-full h-[200px] object-cover rounded-t-2xl"
-                    />
+                    {!filteredAnimals[index].image  ? (
+                      <div className="animate-pulse flex-row items-center flex justify-between w-full flex-wrap gap-[26px]">
+                        <div className="w-full h-[200px] bg-gray-300 block"></div>
+                      </div>
+                    ) : (
+                      <Image
+                        src={filteredAnimals[index].image[0]}
+                        alt=""
+                        height={200}
+                        width={200}
+                        className="w-full h-[200px] object-cover rounded-t-2xl"
+                      />
+                    )}
 
                     <div className="shadow-sm bg-white p-5 rounded-b-2xl">
                       <p className="font-bold text-dark-text text-base">
                         {el.name}
                       </p>
                       <span className="font-normal text-xs text-light-text">
-                        {el.localization}
+                        {el.city} - {el.state}
                       </span>
                     </div>
                   </>
@@ -136,13 +153,20 @@ function NossoPets() {
               );
             })}
           </div>
-        ) : listAnimals.length >= 1 ? (
+        ) : animalsData.length >= 1 ? (
           <div className="flex flex-col items-center">
             <p className={`${myFont.className} text-dark-blue text-2xl`}>
               Nenhum animal encontrado.
             </p>
             <div className="relative w-[300px] h-[300px]">
-              <Image alt="" src={ConfusedCat} width={300} height={300} quality={100} priority/>
+              <Image
+                alt=""
+                src={ConfusedCat}
+                width={300}
+                height={300}
+                quality={100}
+                priority
+              />
             </div>
           </div>
         ) : (

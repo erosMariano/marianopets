@@ -54,6 +54,7 @@ interface RegisterAnimal {
   publishedAt: Date;
   type: string;
   CEP: string
+  state: string;
 }
 
 function CadastrarAnimal({ people }: PropsFormDoacao) {
@@ -76,6 +77,7 @@ function CadastrarAnimal({ people }: PropsFormDoacao) {
     localidade: "",
     activeInput: false,
     error: false,
+    uf: '',
   });
 
   const [validationErrors, setValidationErrors] = useState({
@@ -136,7 +138,8 @@ function CadastrarAnimal({ people }: PropsFormDoacao) {
           tutorName: people.name,
           tutorPhone: people.phone,
           tutorId: people.id,
-          CEP: enderecoCEP.cep
+          CEP: enderecoCEP.cep,
+          state: enderecoCEP.uf
         };
         setValidationErrors((prevState) => ({
           ...prevState,
@@ -198,6 +201,7 @@ function CadastrarAnimal({ people }: PropsFormDoacao) {
             ...prevState,
             localidade: result.localidade,
             error: false,
+            uf: result.uf
           }));
         } else {
           setEnderecoCEP((prevState) => ({
