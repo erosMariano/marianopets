@@ -24,18 +24,19 @@ export default async function handleUpload(req: any, res: any) {
     }
   }
 
-  if (req.method === "PUT") {
-    try{
+  if (req.method === "DELETE") {
+    const { 'ids[]': itemIds } = req.query;
+
+    try {
       await prisma.animal.deleteMany({
         where:{
           id: {
-            in:req.body
+            in:itemIds
           }
         }
       })
-      
       return res.status(200).json({ message: "Deletado com sucesso!" });
-    }catch(error){
+    } catch (error) {
       return res.status(404).json({ message: "Erro ao deletar" });
     }
   }

@@ -48,7 +48,11 @@ function AnimaisCadastrados({ dataAnimal }: AnimalCadastrado) {
 
   async function handleModifyData() {
     try {
-      const res = await api.put("/upload", idsDeleted);
+      const res = await api.delete("/upload", {
+        params: {
+          ids: idsDeleted
+        }
+      });
       if(res.status === 200){
         await toastActive({error: false, message: "Animal deletado"});
       }
