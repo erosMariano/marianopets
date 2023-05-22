@@ -7,6 +7,10 @@ import Head from "next/head";
 import { prisma } from "../../../lib/prisma";
 import { format, formatISO } from "date-fns";
 import CardAnimal from "@/components/pages/doador/CardAnimal";
+import { api } from "../../../lib/axios";
+import { useState } from "react";
+import { ToastContainer } from "react-toastify";
+import { toastActive } from "@/utils/toastComponent";
 const inter = Inter({ subsets: ["latin"] });
 
 interface PropsFormDoacao {
@@ -33,8 +37,28 @@ interface AnimalCadastrado {
 }
 
 function AnimaisCadastrados({ dataAnimal }: AnimalCadastrado) {
+  const [listAnimals, setListAnimals] = useState(dataAnimal);
+  const [idsDeleted, setIdDeleted] = useState<string[]>([]);
+
+  function handleDeletePet(id: string) {
+    const listAnimalsUpdated = listAnimals.filter((animal) => animal.id !== id);
+    setListAnimals(listAnimalsUpdated);
+    setIdDeleted((prevState) => [...prevState, id]);
+  }
+
+  async function handleModifyData() {
+    try {
+      const res = await api.put("/upload", idsDeleted);
+      if(res.status === 200){
+        await toastActive({error: false, message: "Animal deletado"});
+      }
+    } catch (error) {
+      await toastActive({error: true, message: "Erro ao deletar animal"});
+    }
+  }
   return (
     <>
+      <ToastContainer />
       <Head>
         <title>Mariano Pets - Nossos Pets</title>
         <meta
@@ -46,17 +70,26 @@ function AnimaisCadastrados({ dataAnimal }: AnimalCadastrado) {
         className={`${inter.className} flex flex-grow mt-10 lg:mt-20 justify-between w-full max-w-[1312px] mx-auto px-4 gap-6`}
       >
         <Sidebar activeMenu="animais-cadastrados" />
-        <div className="w-full flex gap-3 items-start">
-          {dataAnimal.map(({ id, name, city, details, photos }) => (
-            <CardAnimal
-              city={city}
-              details={details}
-              photos={photos}
-              name={name}
-              key={id}
-              id={id}
-            />
-          ))}
+        <div className="w-full">
+          <div className="flex gap-3 items-start flex-col">
+            {listAnimals.map(({ id, name, city, details, photos }) => (
+              <CardAnimal
+                setDeletePet={handleDeletePet}
+                city={city}
+                details={details}
+                photos={photos}
+                name={name}
+                key={id}
+                id={id}
+              />
+            ))}
+          </div>
+          <button
+            onClick={handleModifyData}
+            className="bg-black text-xl text-white p-2 rounded mt-4"
+          >
+            Salvar
+          </button>
         </div>
       </main>
       <Footer />
