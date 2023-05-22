@@ -23,6 +23,7 @@ model Animal {
   id      String @id @default(auto()) @map("_id") @db.ObjectId
   name    String
   city    String
+  CEP     String
   details String
 
   tutorName  String

@@ -7,6 +7,8 @@ import { myFont } from "@/components/pages/Home/Hero";
 import Link from "next/link";
 import { GetServerSideProps } from "next";
 import { authValidate } from "@/utils/authUtils";
+import { prisma } from "../../../lib/prisma";
+import { format, formatISO } from "date-fns";
 const inter = Inter({ subsets: ["latin"] });
 
 interface PropsFormDoacao {
@@ -17,6 +19,29 @@ interface PropsFormDoacao {
     phone: string;
   };
 }
+interface PropsFormDoacao {
+  id: string;
+  email: string;
+  name: string;
+  phone: string;
+}
+
+interface AnimalCadastrado {
+  dataAnimal: {
+    id: string;
+    name: string;
+    city: string;
+    details: string;
+    tutorName: string;
+    tutorEmail: string;
+    tutorPhone: string;
+    publishedAt: string;
+    photos: string[];
+    type: string;
+    tutorId: string;
+  }[];
+}
+
 
 function DoadorHome({ people }: PropsFormDoacao) {
   
@@ -60,5 +85,48 @@ function DoadorHome({ people }: PropsFormDoacao) {
 export default DoadorHome;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  return await authValidate(context);
+  const { props } = await authValidate(context);
+
+  if (props === undefined || !context.req) {
+    return {
+      redirect: {
+        destination: "/login", //
+        permanent: false,
+      },
+    };
+  }
+
+  const people: PropsFormDoacao = props?.people;
+
+  const res = await prisma.animal.findMany({
+    where: {
+      tutorId: people.id,
+    },
+  });
+
+  if (!res) {
+    return {
+      props: {},
+    };
+  }
+
+  const dataAnimal = Array.from(res).map((el) => {
+    if (el.publishedAt) {
+      const dateFormatted = format(
+        new Date(formatISO(el.publishedAt)),
+        "dd/MM/yyyy HH:mm:ss"
+      );
+      return {
+        ...el,
+        publishedAt: dateFormatted,
+      };
+    }
+    return el;
+  });
+
+  return {
+    props: {
+      dataAnimal: dataAnimal,
+    },
+  };
 };

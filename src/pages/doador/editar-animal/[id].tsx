@@ -1,24 +1,57 @@
+import { authValidate } from "@/utils/authUtils";
+import { GetServerSideProps } from "next";
+import { useRouter } from "next/router";
+import React, { useEffect, useRef, useState } from "react";
+import { prisma } from "../../../../lib/prisma";
+import { format, formatISO } from "date-fns";
+import { ToastContainer } from "react-toastify";
 import Head from "next/head";
-import React, { Suspense, useEffect, useRef, useState } from "react";
+import { Footer } from "@/components/Footer";
 const inter = Inter({ subsets: ["latin"] });
 import { Inter } from "next/font/google";
-import Sidebar from "@/components/pages/doador/Sidebar";
-import { Footer } from "@/components/Footer";
-import { GetServerSideProps } from "next";
-import { authValidate } from "@/utils/authUtils";
-import SelectAnimal from "@/components/pages/doador/DropdownSelectAnimal";
-import UploadIcon from "../../assets/images/icons/upload.svg";
-import Image from "next/image";
-import { createFileList } from "@/utils/createFileList";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Sidebar from "@/components/pages/doador/Sidebar";
+import SelectAnimal from "@/components/pages/doador/DropdownSelectAnimal";
+import { createFileList } from "@/utils/createFileList";
 import { filterTypeAnimal } from "@/utils/filterTypeAnimal";
+import { api } from "../../../../lib/axios";
+import { toastActive } from "@/utils/toastComponent";
 import { ref, uploadBytes } from "firebase/storage";
 import storage from "@/config/firebase.config";
-import { api } from "../../../lib/axios";
-import { ToastContainer } from "react-toastify";
-import { toastActive } from "@/utils/toastComponent";
+import Image from "next/image";
+import UploadIcon from "../../../assets/images/icons/upload.svg";
+
+interface PropsFormDoacao {
+  id: string;
+  email: string;
+  name: string;
+  phone: string;
+}
+
+interface AnimalCadastrado {
+  dataAnimal: {
+    id: string;
+    name: string;
+    city: string;
+    details: string;
+    tutorName: string;
+    tutorEmail: string;
+    tutorPhone: string;
+    publishedAt: string;
+    photos: string[];
+    type: string;
+    tutorId: string;
+  }[];
+
+  people: {
+    id: string;
+    email: string;
+    name: string;
+    phone: string;
+  };
+}
 
 interface PropsFormDoacao {
   people: {
@@ -53,10 +86,9 @@ interface RegisterAnimal {
   tutorPhone: string;
   publishedAt: Date;
   type: string;
-  CEP: string
 }
 
-function CadastrarAnimal({ people }: PropsFormDoacao) {
+function EditarAnimal({ dataAnimal, people}: AnimalCadastrado) {
   const {
     register,
     handleSubmit,
@@ -66,6 +98,8 @@ function CadastrarAnimal({ people }: PropsFormDoacao) {
     resolver: zodResolver(cadastroAnimalSchema),
   });
 
+
+  
   const inputImageRef = useRef<HTMLInputElement>(null);
   const [imagePreview, setImagePreview] = useState<PreviewImageFrontEnd[]>([]);
   const [imagesFiles, setImagesFile] = useState<FileList | null>();
@@ -136,7 +170,6 @@ function CadastrarAnimal({ people }: PropsFormDoacao) {
           tutorName: people.name,
           tutorPhone: people.phone,
           tutorId: people.id,
-          CEP: enderecoCEP.cep
         };
         setValidationErrors((prevState) => ({
           ...prevState,
@@ -237,8 +270,11 @@ function CadastrarAnimal({ people }: PropsFormDoacao) {
     validationErrors.activeForm,
   ]);
 
+
+
   return (
     <>
+      <ToastContainer />
       <Head>
         <title>Mariano Pets - Nossos Pets</title>
         <meta
@@ -246,12 +282,11 @@ function CadastrarAnimal({ people }: PropsFormDoacao) {
           content="Encontre seu companheiro perfeito para adoção no nosso site de adoção de animais. Temos cães, gatos e outros animais em busca de um lar amoroso. Visite-nos hoje para encontrar o amigo peludo ideal!"
         />
       </Head>
-      <ToastContainer />
 
       <main
         className={`${inter.className} flex flex-grow mt-10 lg:mt-20 justify-between w-full max-w-[1312px] mx-auto px-4 gap-6`}
       >
-        <Sidebar activeMenu="novo-animal" />
+        <Sidebar activeMenu="editar-animal" />
 
         <form
           className="w-full flex flex-col gap-4"
@@ -272,6 +307,7 @@ function CadastrarAnimal({ people }: PropsFormDoacao) {
             type="text"
             className="w-full px-4 py-2 rounded-md border-gray-300 font-semibold outline-none transition-all border focus:border-yellow-500 text-gray-700"
             placeholder="Nome do animal"
+            value={dataAnimal[0].name}
             {...register("name", { required: true })}
           />
           {errors.name && (
@@ -299,13 +335,14 @@ function CadastrarAnimal({ people }: PropsFormDoacao) {
             className="w-full px-4 py-2 rounded-md border-gray-300 font-semibold outline-none transition-all border focus:border-yellow-500 text-gray-700"
             placeholder="Cidade do animal"
             disabled
-            value={enderecoCEP.localidade}
+            value={dataAnimal[0].city}
           />
 
           <textarea
             className="w-full resize-none px-4 py-2 h-44 rounded-md border-gray-300 font-semibold outline-none transition-all border focus:border-yellow-500 text-gray-700"
             placeholder="Detalhes sobre o animal"
             {...register("details", { required: true })}
+            value={dataAnimal[0].details}
           />
           {errors.details && (
             <span className="text-red-400 -mt-4 flex -mb-2 font-semibold">
@@ -372,13 +409,57 @@ function CadastrarAnimal({ people }: PropsFormDoacao) {
           </button>
         </form>
       </main>
+
       <Footer />
     </>
   );
 }
 
-export default CadastrarAnimal;
+export default EditarAnimal;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  return await authValidate(context);
+  const { props } = await authValidate(context);
+  if (props === undefined || !context.req) {
+    return {
+      redirect: {
+        destination: "/login", //
+        permanent: false,
+      },
+    };
+  }
+  const { id } = context.query;
+
+  const res = await prisma.animal.findMany({
+    where: {
+      id: String(id),
+    },
+  });
+  const people: PropsFormDoacao = props?.people;
+
+  if (!res) {
+    return {
+      props: {},
+    };
+  }
+
+  const dataAnimal = Array.from(res).map((el) => {
+    if (el.publishedAt) {
+      const dateFormatted = format(
+        new Date(formatISO(el.publishedAt)),
+        "dd/MM/yyyy HH:mm:ss"
+      );
+      return {
+        ...el,
+        publishedAt: dateFormatted,
+      };
+    }
+    return el;
+  });
+
+  return {
+    props: {
+      dataAnimal: dataAnimal,
+      people: people
+    },
+  };
 };

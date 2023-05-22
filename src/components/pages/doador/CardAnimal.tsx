@@ -1,8 +1,14 @@
 import storage from "@/config/firebase.config";
 import { getDownloadURL, ref } from "firebase/storage";
 import Image from "next/image";
-import { Trash, Pen } from "phosphor-react";
+import { useRouter } from "next/router";
+import { Trash, Pen, WarningCircle } from "phosphor-react";
 import React, { useEffect, useState } from "react";
+
+interface handleDeletePetProps {
+  id: string;
+  deleteId: boolean;
+}
 
 interface CardAnimalProps {
   name: string;
@@ -22,6 +28,7 @@ function CardAnimal({
 }: CardAnimalProps) {
   const [images, setImages] = useState<string[]>([""]);
   const [heightCard, setHeightCard] = useState(true);
+  const [pending, setPending] = useState(false);
 
   useEffect(() => {
     async function getImagesFromFirebase() {
@@ -40,11 +47,21 @@ function CardAnimal({
     setHeightCard((prevState) => !prevState);
   }
 
+  const route = useRouter();
+
+  function handleEditAnimal() {
+    // route.push(`/doador/editar-animal/${id}`)
+  }
+
+  function handleDeleteAnimal(id: string) {
+    setPending((prevState) => !prevState);
+    setDeletePet(id);
+  }
   return (
     <div
       className={`${
-        heightCard ? "max-h-[48px] overflow-hidden" : "max-h-full"
-      } shadow-sm bg-white p-3 w-full rounded-lg transition-all`}
+        heightCard ? "max-h-[64px] overflow-hidden" : "max-h-full"
+      } shadow-sm bg-white p-3 w-full rounded-lg transition-all `}
       key={id}
     >
       <div className="flex justify-between items-center">
@@ -54,15 +71,28 @@ function CardAnimal({
         </h2>
 
         <div className="flex items-center gap-2">
-          <button onClick={handleStateCard}>Abrir card</button>
           <button
-            onClick={() => setDeletePet(id)}
-            title="Deletar"
+            onClick={handleStateCard}
+            className="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-700 transition-all"
+          >
+            {heightCard ? "Abrir card" : "Fechar Card"}
+          </button>
+          <button
+            onClick={() => handleDeleteAnimal(id)}
+            title={!pending ? "Deletar" : "Salvar para deletar"}
             className="text-red-400"
           >
-            <Trash size={20} weight="fill" />
+            {pending ? (
+              <WarningCircle size={20} weight="fill" />
+            ) : (
+              <Trash size={20} weight="fill" />
+            )}
           </button>
-          <button title="Editar" className="text-purple-500">
+          <button
+            onClick={handleEditAnimal}
+            title="Editar"
+            className="text-purple-500"
+          >
             <Pen size={20} weight="fill" />
           </button>
         </div>
@@ -76,10 +106,17 @@ function CardAnimal({
           {details}
         </h2>
 
-        <div className="flex gap-2 flex-wrap">
+        <div className="flex gap-2 flex-wrap items-start">
           {images[0] !== "" &&
             images.map((url) => (
-              <Image src={url} alt="" key={url} width={200} height={200} />
+              <Image
+                src={url}
+                alt=""
+                key={url}
+                width={200}
+                height={200}
+                style={{ objectFit: "contain" }}
+              />
             ))}
         </div>
       </div>

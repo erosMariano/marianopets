@@ -14,6 +14,7 @@ interface RegisterAnimal {
   tutorPhone: string;
   publishedAt: Date;
   type: string;
+  CEP: string;
 }
 
 export default authenticated(async function RegisterAnimal(
@@ -30,7 +31,8 @@ export default authenticated(async function RegisterAnimal(
     tutorId,
     tutorName,
     tutorPhone,
-    type
+    type,
+    CEP
   } = req.body as RegisterAnimal;
 
   const registerAnimalData: RegisterAnimal = {
@@ -42,7 +44,8 @@ export default authenticated(async function RegisterAnimal(
     tutorEmail: tutorEmail,
     tutorName: tutorName,
     tutorPhone: tutorPhone,
-    type: type
+    type: type,
+    CEP: CEP
   };
 
   if (

@@ -8,7 +8,7 @@ import { api } from "../../../../lib/axios";
 import { useRouter } from "next/router";
 
 interface SidebarProps {
-  activeMenu: "home" | "animais-cadastrados" | "novo-animal";
+  activeMenu: "home" | "animais-cadastrados" | "novo-animal" | 'editar-animal';
 }
 function Sidebar({ activeMenu }: SidebarProps) {
   const route = useRouter();
