@@ -50,13 +50,13 @@ interface AnimalData {
 }
 interface NossosPetsProps {
   animalsData: {
-    id: string
-    name: string
-    city: string
-    state:string
-    photo: string[]
-    type: string
-    image: string[]
+    id: string;
+    name: string;
+    city: string;
+    state: string;
+    photo: string[];
+    type: string;
+    image: string[];
   }[];
 }
 function NossoPets({ animalsData }: NossosPetsProps) {
@@ -117,6 +117,7 @@ function NossoPets({ animalsData }: NossosPetsProps) {
                         alt=""
                         height={200}
                         width={200}
+                        blurDataURL={filteredAnimals[index].image[0]}
                         className="w-full h-[200px] object-cover rounded-t-2xl"
                       />
                     )}
@@ -134,7 +135,7 @@ function NossoPets({ animalsData }: NossosPetsProps) {
               );
             })}
           </div>
-        ) : animalsData.length >= 1 ? (
+        ) : (
           <div className="flex flex-col items-center">
             <p className={`${myFont.className} text-dark-blue text-2xl`}>
               Nenhum animal encontrado.
@@ -148,15 +149,6 @@ function NossoPets({ animalsData }: NossosPetsProps) {
                 quality={100}
                 priority
               />
-            </div>
-          </div>
-        ) : (
-          <div className="flex w-full flex-1 flex-col items-center">
-            <div className="animate-pulse flex-row items-center flex justify-between w-full flex-wrap gap-[26px]">
-              <div className="w-full md:w-[48%] h-[288px] lg:w-[300px] rounded-2xl bg-gray-300 block"></div>
-              <div className="w-full md:w-[48%] h-[288px] lg:w-[300px] rounded-2xl bg-gray-300 block"></div>
-              <div className="w-full md:w-[48%] h-[288px] lg:w-[300px] rounded-2xl bg-gray-300 block"></div>
-              <div className="w-full md:w-[48%] h-[288px] lg:w-[300px] rounded-2xl bg-gray-300 block"></div>
             </div>
           </div>
         )}

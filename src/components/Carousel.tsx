@@ -26,6 +26,7 @@ const Carousel = ({ slides }: CarouselProps) => {
         width={300}
         height={300}
         quality={100}
+         
       />
 
       {/* Miniaturas dos slides */}
@@ -44,6 +45,7 @@ const Carousel = ({ slides }: CarouselProps) => {
               src={slide.photoAnimal}
               alt={`Slide ${slide.id}`}
               className="h-20 w-20 object-cover rounded-2xl"
+              loading="eager" 
             />
           </button>
         ))}

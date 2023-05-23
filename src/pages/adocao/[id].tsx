@@ -2,24 +2,23 @@ import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { Inter } from "next/font/google";
 import Head from "next/head";
+
 const inter = Inter({ subsets: ["latin"] });
 
+import Carousel from "@/components/Carousel";
+import { myFont } from "@/components/pages/Home/Hero";
+import PopupAdotar from "@/components/pages/PopupAdotar";
+import storage from "@/config/firebase.config";
+import { getDownloadURL, ref } from "firebase/storage";
+import { GetStaticPaths, GetStaticProps } from "next";
 import Image from "next/image";
+import { useRouter } from "next/router";
+import { useState } from "react";
+import { prisma } from "../../../lib/prisma";
+import ArrowButton from "../../assets/images/icons/arrow-button.svg";
 import iconLocation from "../../assets/images/icons/location.svg";
 import iconPeople from "../../assets/images/icons/people.svg";
-import { myFont } from "@/components/pages/Home/Hero";
 import ShareIcon from "../../assets/images/icons/share.svg";
-import ArrowButton from "../../assets/images/icons/arrow-button.svg";
-import Carousel from "@/components/Carousel";
-import PopupAdotar from "@/components/pages/PopupAdotar";
-import { useEffect, useState } from "react";
-import { api } from "../../../lib/axios";
-import { GetStaticPaths, GetStaticProps } from "next";
-import { prisma } from "../../../lib/prisma";
-import { format, formatISO } from "date-fns";
-import { getDownloadURL, ref } from "firebase/storage";
-import storage from "@/config/firebase.config";
-import { useRouter } from "next/router";
 
 interface AnimalProps {
   dataAnimal: {
@@ -41,7 +40,7 @@ interface AnimalProps {
         downloadUrl: string;
       }
     ];
-  }[];
+  };
 }
 
 function Animal({ dataAnimal }: AnimalProps) {
@@ -52,37 +51,32 @@ function Animal({ dataAnimal }: AnimalProps) {
   function changeModal() {
     setOpenModal((prevState) => !prevState);
   }
-  if (router.isFallback) {
-    return <div>Loading...</div>;
-  }
 
-  const animalWithId = dataAnimal[0].image.map((image, index) => {
+  const animalWithId = dataAnimal.image.map((image, index) => {
     const { downloadUrl } = image;
     return {
       id: index,
       photoAnimal: downloadUrl,
     };
   });
-  
+
   return (
     <>
       <Head>
-        <title>
-          Mariano Pets - {dataAnimal[0].name ? dataAnimal[0].name : ""}
-        </title>
+        <title>Mariano Pets - {dataAnimal.name ? dataAnimal.name : ""}</title>
         <meta
           name="description"
           content="Encontre seu companheiro perfeito para adoção no nosso site de adoção de animais. Temos cães, gatos e outros animais em busca de um lar amoroso. Visite-nos hoje para encontrar o amigo peludo ideal!"
         />
-      </Head>{" "}
-      *
+      </Head>
       <Header />
       <PopupAdotar
-        email={dataAnimal[0].tutorEmail}
+        email={dataAnimal.tutorEmail}
         isOpen={openModal}
-        phone={dataAnimal[0].tutorPhone}
+        phone={dataAnimal.tutorPhone}
         setIsOpen={changeModal}
       />
+
       <main
         className={`${inter.className} flex-grow pb-10 mt-10 lg:mt-20 justify-between w-full max-w-[1312px] mx-auto px-4`}
       >
@@ -94,7 +88,7 @@ function Animal({ dataAnimal }: AnimalProps) {
           <div className="flex w-full md:w-[600px] flex-col">
             <div className="flex items-center gap-4">
               <h2 className={`${myFont.className} text-dark-text text-4xl`}>
-                {dataAnimal[0].name}
+                {dataAnimal.name}
               </h2>
               <button>
                 {" "}
@@ -117,7 +111,7 @@ function Animal({ dataAnimal }: AnimalProps) {
                 />
 
                 <span className="text-light-text text-base">
-                  Está em {dataAnimal[0].city}, {dataAnimal[0].state}
+                  Está em {dataAnimal.city}, {dataAnimal.state}
                 </span>
               </div>
 
@@ -129,8 +123,8 @@ function Animal({ dataAnimal }: AnimalProps) {
                   alt="Icone publicado"
                 />
                 <span className="text-light-text text-base">
-                  Publicado por <strong>{dataAnimal[0].tutorName}</strong> em{" "}
-                  {dataAnimal[0].publishedAt}
+                  Publicado por <strong>{dataAnimal.tutorName}</strong> em {}
+
                 </span>
               </div>
 
@@ -146,11 +140,9 @@ function Animal({ dataAnimal }: AnimalProps) {
                 <h2
                   className={`${myFont.className} text-dark-text text-2xl mt-4 mb-2`}
                 >
-                  Descrição de {dataAnimal[0].name}
+                  Descrição de {dataAnimal.name}
                 </h2>
-                <p className="text-light-text text-lg">
-                  {dataAnimal[0].details}
-                </p>
+                <p className="text-light-text text-lg">{dataAnimal.details}</p>
               </div>
             </div>
           </div>
@@ -165,8 +157,8 @@ export default Animal;
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const animals = await prisma.animal.findMany();
-  const idAnimals = animals.map((el) => {
-    return { params: { slug: el.id.toString() } };
+  const idAnimals = animals.map((animal) => {
+    return { params: { id: animal.id.toString() } };
   });
 
   return {
@@ -176,44 +168,37 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {
-  const { slug } = context.params!;
-
-  const res = await prisma.animal.findMany({
+  const { id } = context.params!;
+  const res = await prisma.animal.findUnique({
     where: {
-      id: String(slug),
+      id: String(id),
     },
   });
 
-  const filesAnimalsRefs = res.map((animal) => animal.photos);
+  if (!res) {
+    return {
+      notFound: true,
+    };
+  }
+
+  const filesAnimalsRefs = res.photos;
 
   const updatedAnimals = await Promise.all(
-    filesAnimalsRefs[0].map(async (path, index) => {
+    filesAnimalsRefs.map(async (path, index) => {
       const fileRef = ref(storage, path);
       const downloadUrl = await getDownloadURL(fileRef);
-
       return { downloadUrl };
     })
   );
 
-  const dataAnimal = Array.from(res).map((el) => {
-    if (el.publishedAt) {
-      const dateFormatted = format(
-        new Date(formatISO(el.publishedAt)),
-        "dd/MM/yyyy HH:mm:ss"
-      );
-
-      return {
-        ...el,
-        publishedAt: dateFormatted,
-        image: updatedAnimals,
-      };
-    }
-    return el;
-  });
+  const dataAnimal = {
+    ...res,
+    image: updatedAnimals,
+  };
 
   return {
     props: {
-      dataAnimal,
+      dataAnimal: JSON.parse(JSON.stringify(dataAnimal)),
     },
   };
 };
