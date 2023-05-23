@@ -15,6 +15,8 @@ import FilterQueroAdotar from "@/components/pages/quero-adotar/Filter";
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
 
 import storage from "@/config/firebase.config";
+import { GetStaticProps } from "next";
+import { prisma } from "../../lib/prisma";
 
 interface AnimalContent {
   imageUrl: string | StaticImageData;
@@ -46,48 +48,18 @@ interface AnimalData {
 
   image: string[];
 }
-
-function NossoPets() {
-  const [animalsData, setAnimalsData] = useState<AnimalData[]>([]);
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const {
-          data: { animals },
-        } = await api.get("/getAllAnimals");
-
-        const myAnimals = animals as AnimalData[];
-        const filesAnimalsRefs = myAnimals.map((animal) => animal.photos[0]);
-        await fetchImages(filesAnimalsRefs, myAnimals);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-
-    async function fetchImages(items: string[], animals: AnimalData[]) {
-      try {
-        const updatedAnimals = await Promise.all(
-          items.map(async (path, index) => {
-            const fileRef = ref(storage, path);
-            const downloadURL = await getDownloadURL(fileRef);
-
-            return {
-              ...animals[index],
-              image: [downloadURL],
-            };
-          })
-        );
-
-        setAnimalsData(updatedAnimals);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-
-    fetchData();
-  }, []);
-
+interface NossosPetsProps {
+  animalsData: {
+    id: string
+    name: string
+    city: string
+    state:string
+    photo: string[]
+    type: string
+    image: string[]
+  }[];
+}
+function NossoPets({ animalsData }: NossosPetsProps) {
   const [itemActiveFilter, setItemActiveFilter] = useState(0);
   const [listItemFilter, setListItemFilter] = useState<ListItemFilter[]>([
     { type: "all", name: "Todos animais", active: true },
@@ -195,3 +167,38 @@ function NossoPets() {
 }
 
 export default NossoPets;
+
+export const getStaticProps: GetStaticProps = async () => {
+  const res = await prisma.animal.findMany();
+
+  const formatAnimal = res.map((animal) => {
+    return {
+      id: animal.id,
+      name: animal.name,
+      city: animal.city,
+      state: animal.state,
+      photo: animal.photos,
+      type: animal.type,
+    };
+  });
+
+  const filesAnimalsRefs = formatAnimal.map((animal) => animal.photo[0]);
+
+  const animalsData = await Promise.all(
+    filesAnimalsRefs.map(async (path, index) => {
+      const fileRef = ref(storage, path);
+      const downloadURL = await getDownloadURL(fileRef);
+
+      return {
+        ...formatAnimal[index],
+        image: [downloadURL],
+      };
+    })
+  );
+
+  return {
+    props: {
+      animalsData,
+    },
+  };
+};

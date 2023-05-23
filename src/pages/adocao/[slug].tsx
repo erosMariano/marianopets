@@ -36,34 +36,37 @@ interface AnimalProps {
     photos: string[];
     type: string;
     tutorId: string;
+    image: [
+      {
+        downloadUrl: string;
+      }
+    ];
   }[];
 }
 
 function Animal({ dataAnimal }: AnimalProps) {
-  // console.log(dataAnimal[0])
-
   const router = useRouter();
-  console.log()
-
-
-  const slides = [
-    {
-      photoAnimal: "",
-      id: 0,
-    },
-  ];
 
   const [openModal, setOpenModal] = useState(false);
 
   function changeModal() {
     setOpenModal((prevState) => !prevState);
   }
-  if(router.isFallback){
+  if (router.isFallback) {
     return <div>Loading...</div>;
   }
+
+  const animalWithId = dataAnimal[0].image.map((image, index) => {
+    const { downloadUrl } = image;
+    return {
+      id: index,
+      photoAnimal: downloadUrl,
+    };
+  });
+  
   return (
     <>
-      {/* <Head>
+      <Head>
         <title>
           Mariano Pets - {dataAnimal[0].name ? dataAnimal[0].name : ""}
         </title>
@@ -71,27 +74,27 @@ function Animal({ dataAnimal }: AnimalProps) {
           name="description"
           content="Encontre seu companheiro perfeito para adoção no nosso site de adoção de animais. Temos cães, gatos e outros animais em busca de um lar amoroso. Visite-nos hoje para encontrar o amigo peludo ideal!"
         />
-      </Head> */}
+      </Head>{" "}
+      *
       <Header />
-      {/* 
       <PopupAdotar
         email={dataAnimal[0].tutorEmail}
         isOpen={openModal}
         phone={dataAnimal[0].tutorPhone}
         setIsOpen={changeModal}
-      /> */}
-      {/* <main
+      />
+      <main
         className={`${inter.className} flex-grow pb-10 mt-10 lg:mt-20 justify-between w-full max-w-[1312px] mx-auto px-4`}
       >
         <div className="flex justify-between gap-8 flex-col md:flex-row">
           <div className="w-full md:w-[500px]">
-            <Carousel slides={slides} />
+            <Carousel slides={animalWithId} />
           </div>
 
           <div className="flex w-full md:w-[600px] flex-col">
             <div className="flex items-center gap-4">
               <h2 className={`${myFont.className} text-dark-text text-4xl`}>
-                {animal.name}
+                {dataAnimal[0].name}
               </h2>
               <button>
                 {" "}
@@ -114,7 +117,7 @@ function Animal({ dataAnimal }: AnimalProps) {
                 />
 
                 <span className="text-light-text text-base">
-                  Está em {animal.city}, {animal.state}
+                  Está em {dataAnimal[0].city}, {dataAnimal[0].state}
                 </span>
               </div>
 
@@ -126,8 +129,8 @@ function Animal({ dataAnimal }: AnimalProps) {
                   alt="Icone publicado"
                 />
                 <span className="text-light-text text-base">
-                  Publicado por <strong>{animal.tutorName}</strong> em{" "}
-                  {animal.publishedAt}
+                  Publicado por <strong>{dataAnimal[0].tutorName}</strong> em{" "}
+                  {dataAnimal[0].publishedAt}
                 </span>
               </div>
 
@@ -143,14 +146,16 @@ function Animal({ dataAnimal }: AnimalProps) {
                 <h2
                   className={`${myFont.className} text-dark-text text-2xl mt-4 mb-2`}
                 >
-                  Descrição de {animal.name}
+                  Descrição de {dataAnimal[0].name}
                 </h2>
-                <p className="text-light-text text-lg">{animal.details}</p>
+                <p className="text-light-text text-lg">
+                  {dataAnimal[0].details}
+                </p>
               </div>
             </div>
           </div>
         </div>
-      </main> */}
+      </main>
       <Footer />
     </>
   );
@@ -196,6 +201,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
         new Date(formatISO(el.publishedAt)),
         "dd/MM/yyyy HH:mm:ss"
       );
+
       return {
         ...el,
         publishedAt: dateFormatted,
