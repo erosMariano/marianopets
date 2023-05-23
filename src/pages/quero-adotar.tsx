@@ -29,6 +29,7 @@ interface ListItemFilter {
 }
 
 interface AnimalData {
+  id: string;
   name: string;
   city: string;
   details: string;
@@ -129,7 +130,7 @@ function NossoPets() {
             {filteredAnimals.map((el, index) => {
               return (
                 <Link
-                  href={`adocao/${convertStringInSlug(el.name)}`}
+                  href={`adocao/${el.id}`}
                   key={index}
                   className="flex flex-col relative w-full  md:w-[48%] lg:w-[300px] overflow-hidden shadow-sm hover:shadow-md rounded-2xl    transition-all"
                 >

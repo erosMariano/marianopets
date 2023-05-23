@@ -4,10 +4,6 @@ import { Inter } from "next/font/google";
 import Head from "next/head";
 const inter = Inter({ subsets: ["latin"] });
 
-import AnimalImage from "../../assets/images/beagles-filhotes-bocejando.jpg";
-import AnimalImage2 from "../../assets/images/adote-roedor.png";
-import AnimalImage3 from "../../assets/images/adote-reptil.png";
-
 import Image from "next/image";
 import iconLocation from "../../assets/images/icons/location.svg";
 import iconPeople from "../../assets/images/icons/people.svg";
@@ -18,23 +14,42 @@ import Carousel from "@/components/Carousel";
 import PopupAdotar from "@/components/pages/PopupAdotar";
 import { useEffect, useState } from "react";
 import { api } from "../../../lib/axios";
+import { GetStaticPaths, GetStaticProps } from "next";
+import { prisma } from "../../../lib/prisma";
+import { format, formatISO } from "date-fns";
+import { getDownloadURL, ref } from "firebase/storage";
+import storage from "@/config/firebase.config";
+import { useRouter } from "next/router";
 
-function Animal() {
+interface AnimalProps {
+  dataAnimal: {
+    publishedAt: string;
+    id: string;
+    name: string;
+    city: string;
+    state: string;
+    CEP: string;
+    details: string;
+    tutorName: string;
+    tutorEmail: string;
+    tutorPhone: string;
+    photos: string[];
+    type: string;
+    tutorId: string;
+  }[];
+}
+
+function Animal({ dataAnimal }: AnimalProps) {
+  // console.log(dataAnimal[0])
+
+  const router = useRouter();
+  console.log()
+
+
   const slides = [
     {
-      photoAnimal:
-        "https://firebasestorage.googleapis.com/v0/b/inductive-way-386721.appspot.com/o/files%2Ffeche-o-gato-fofo-dentro-de-casa.jpg?alt=media&token=bf1be04b-3144-42ab-861b-73ce130878e9",
+      photoAnimal: "",
       id: 0,
-    },
-    {
-      photoAnimal:
-        "https://firebasestorage.googleapis.com/v0/b/inductive-way-386721.appspot.com/o/files%2F04-09_gato_SITE.webp?alt=media&token=0d60abbd-a005-4749-80b7-6bfad4ad7a84",
-      id: 1,
-    },
-    {
-      photoAnimal:
-        "https://firebasestorage.googleapis.com/v0/b/inductive-way-386721.appspot.com/o/files%2Fgato-e-mamifero-entenda-mais-sobre-a-especie.webp?alt=media&token=5b90469a-5479-4f7d-80cd-c66dce028814",
-      id: 2,
     },
   ];
 
@@ -43,26 +58,29 @@ function Animal() {
   function changeModal() {
     setOpenModal((prevState) => !prevState);
   }
+  if(router.isFallback){
+    return <div>Loading...</div>;
+  }
   return (
     <>
-      <Head>
+      {/* <Head>
         <title>
-          Mariano Pets - Encontre seu companheiro perfeito para adoção
+          Mariano Pets - {dataAnimal[0].name ? dataAnimal[0].name : ""}
         </title>
         <meta
           name="description"
           content="Encontre seu companheiro perfeito para adoção no nosso site de adoção de animais. Temos cães, gatos e outros animais em busca de um lar amoroso. Visite-nos hoje para encontrar o amigo peludo ideal!"
         />
-      </Head>
+      </Head> */}
       <Header />
-
+      {/* 
       <PopupAdotar
-        email="erosmariano1@gmail.com"
+        email={dataAnimal[0].tutorEmail}
         isOpen={openModal}
-        phone="11956649471"
+        phone={dataAnimal[0].tutorPhone}
         setIsOpen={changeModal}
-      />
-      <main
+      /> */}
+      {/* <main
         className={`${inter.className} flex-grow pb-10 mt-10 lg:mt-20 justify-between w-full max-w-[1312px] mx-auto px-4`}
       >
         <div className="flex justify-between gap-8 flex-col md:flex-row">
@@ -73,7 +91,7 @@ function Animal() {
           <div className="flex w-full md:w-[600px] flex-col">
             <div className="flex items-center gap-4">
               <h2 className={`${myFont.className} text-dark-text text-4xl`}>
-                Sol bebê fêmea
+                {animal.name}
               </h2>
               <button>
                 {" "}
@@ -96,7 +114,7 @@ function Animal() {
                 />
 
                 <span className="text-light-text text-base">
-                  Está em São Paulo, São Paulo
+                  Está em {animal.city}, {animal.state}
                 </span>
               </div>
 
@@ -108,7 +126,8 @@ function Animal() {
                   alt="Icone publicado"
                 />
                 <span className="text-light-text text-base">
-                  Publicado por <strong>Marcia Helena</strong> em 16/05/2023
+                  Publicado por <strong>{animal.tutorName}</strong> em{" "}
+                  {animal.publishedAt}
                 </span>
               </div>
 
@@ -124,27 +143,71 @@ function Animal() {
                 <h2
                   className={`${myFont.className} text-dark-text text-2xl mt-4 mb-2`}
                 >
-                  A história de Sol bebê fêmea
+                  Descrição de {animal.name}
                 </h2>
-                <p className="text-light-text text-lg">
-                  Essa é a Sol, uma linda bebê estopinha. Ela tem
-                  aproximadamente 3 meses. Como todo filhote ela é muito
-                  brincalhona e dócil. Não sei o tamanho que vai ficar pq foi
-                  resgatada da rua. Ela já está castrada e vermifugada, as
-                  vacinas estão em andamento. Se quiser alegria na casa e uma
-                  grande companheira, adote a Sol. Entrar em contato por e-mail:
-                  marciahelenasp@hotmail.com Ou via mensagem no WhatsApp (11)
-                  94980.7095 Obrigada
-                </p>
+                <p className="text-light-text text-lg">{animal.details}</p>
               </div>
             </div>
           </div>
         </div>
-      </main>
-
+      </main> */}
       <Footer />
     </>
   );
 }
 
 export default Animal;
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const animals = await prisma.animal.findMany();
+  const idAnimals = animals.map((el) => {
+    return { params: { slug: el.id.toString() } };
+  });
+
+  return {
+    paths: idAnimals,
+    fallback: "blocking",
+  };
+};
+
+export const getStaticProps: GetStaticProps = async (context) => {
+  const { slug } = context.params!;
+
+  const res = await prisma.animal.findMany({
+    where: {
+      id: String(slug),
+    },
+  });
+
+  const filesAnimalsRefs = res.map((animal) => animal.photos);
+
+  const updatedAnimals = await Promise.all(
+    filesAnimalsRefs[0].map(async (path, index) => {
+      const fileRef = ref(storage, path);
+      const downloadUrl = await getDownloadURL(fileRef);
+
+      return { downloadUrl };
+    })
+  );
+
+  const dataAnimal = Array.from(res).map((el) => {
+    if (el.publishedAt) {
+      const dateFormatted = format(
+        new Date(formatISO(el.publishedAt)),
+        "dd/MM/yyyy HH:mm:ss"
+      );
+      return {
+        ...el,
+        publishedAt: dateFormatted,
+        image: updatedAnimals,
+      };
+    }
+    return el;
+  });
+
+  return {
+    props: {
+      dataAnimal,
+    },
+  };
+};
