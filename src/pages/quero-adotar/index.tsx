@@ -1,53 +1,28 @@
-import Head from "next/head";
-import React, { useEffect, useState } from "react";
-import { Inter } from "next/font/google";
-const inter = Inter({ subsets: ["latin"] });
-import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { Header } from "@/components/Header";
+import { Inter } from "next/font/google";
+import Head from "next/head";
+import { useState } from "react";
+const inter = Inter({ subsets: ["latin"] });
 
-import Image, { StaticImageData } from "next/image";
-import { api } from "../../lib/axios";
-import Link from "next/link";
-import { convertStringInSlug } from "@/utils/convertStringInSlug";
-import ConfusedCat from "../assets/images/confusedCat.png";
 import { myFont } from "@/components/pages/Home/Hero";
 import FilterQueroAdotar from "@/components/pages/quero-adotar/Filter";
-import { getStorage, ref, getDownloadURL } from "firebase/storage";
+import { getDownloadURL, ref } from "firebase/storage";
+import Image from "next/image";
+import Link from "next/link";
+import ConfusedCat from "../../assets/images/confusedCat.png";
 
 import storage from "@/config/firebase.config";
 import { GetStaticProps } from "next";
-import { prisma } from "../../lib/prisma";
+import { prisma } from "../../../lib/prisma";
 
-interface AnimalContent {
-  imageUrl: string | StaticImageData;
-  type: "dog" | "cat" | "bird" | "fish" | "rodent" | "reptile";
-  name: string;
-  localization: string;
-}
+
 interface ListItemFilter {
   type: string;
   name: string;
   active: boolean;
 }
 
-interface AnimalData {
-  id: string;
-  name: string;
-  city: string;
-  details: string;
-  photos: string[];
-
-  tutorId?: string;
-  tutorName: string;
-  tutorEmail: string;
-  tutorPhone: string;
-  publishedAt: Date;
-  type: string;
-  CEP: string;
-  state: string;
-
-  image: string[];
-}
 interface NossosPetsProps {
   animalsData: {
     id: string;
@@ -102,7 +77,7 @@ function NossoPets({ animalsData }: NossosPetsProps) {
             {filteredAnimals.map((el, index) => {
               return (
                 <Link
-                  href={`adocao/${el.id}`}
+                  href={`/quero-adotar/${el.id}`}
                   key={index}
                   className="flex flex-col relative w-full  md:w-[48%] lg:w-[300px] overflow-hidden shadow-sm hover:shadow-md rounded-2xl    transition-all"
                 >

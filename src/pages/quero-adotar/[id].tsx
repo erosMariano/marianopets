@@ -123,8 +123,8 @@ function Animal({ dataAnimal }: AnimalProps) {
                   alt="Icone publicado"
                 />
                 <span className="text-light-text text-base">
-                  Publicado por <strong>{dataAnimal.tutorName}</strong> em {}
-
+                  Publicado por <strong>{dataAnimal.tutorName}</strong> em{" "}
+                  {new Intl.DateTimeFormat("pt-br").format(new Date(dataAnimal.publishedAt))}
                 </span>
               </div>
 

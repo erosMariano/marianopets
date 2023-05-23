@@ -90,7 +90,7 @@ export function Header({ authenticated }: PropsTeste) {
                   className="font-bold text-base text-dark-blue"
                   onClick={() => handleMenuClick()}
                 >
-                  Quero adotar
+                  Nosso Pets
                 </Link>
               </li>
               <li>
