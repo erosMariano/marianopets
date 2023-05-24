@@ -63,7 +63,7 @@ function Animal({ dataAnimal }: AnimalProps) {
     try{
       await navigator.share({
         title: `Mariano Pets - ${dataAnimal.name}`,
-        text: `Conheça esse adorável ${dataAnimal.type} para adoção! Venha conhecê-lo e dar um lar amoroso para esse animal.`,
+        text: `Conheça esse adorável animal que está para adoção! Venha conhecê-lo e dar um lar amoroso para esse animal.`,
         url: `https://marianopets.vercel.app/quero-adotar/${dataAnimal.id}`
       });
     }catch(error){
