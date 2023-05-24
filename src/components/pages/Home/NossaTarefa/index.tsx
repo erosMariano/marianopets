@@ -6,9 +6,9 @@ const myFont = localFont({ src: "../../fonts/MADE_Gentle.otf" });
 
 export function NossaTarefa() {
   return (
-    <section className="xl:mt-20" id="como-funciona">
+    <section className="xl:mt-20 overflow-x-hidden" id="como-funciona">
       <div className="flex-col flex xl:flex-row max-w-[1312px] mx-auto px-4 align-cen justify-between gap-11">
-        <div className="flex-1">
+        <div className="flex-1" data-aos="fade-left" data-aos-duration="1000">
           <h2 className={`${myFont.className} mb-6 text-4xl text-dark-text`}>
             Nossa tarefa
           </h2>
@@ -35,7 +35,7 @@ export function NossaTarefa() {
         </div>
 
         <div>
-          <Image src={BirdImage} alt="Pássaro image" className="h-fit mx-auto xl:mr-auto" />
+          <Image src={BirdImage} alt="Pássaro image" className="h-fit mx-auto xl:mr-auto" data-aos="fade-right" data-aos-duration="1000"/>
         </div>
       </div>
     </section>

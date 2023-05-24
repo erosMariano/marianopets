@@ -12,9 +12,9 @@ import { CardAdote } from "./CardAdote";
 
 interface AdoteProps {
   title: string;
-  url: string;
   image: StaticImageData;
   altImage: string;
+  type: string
 }
 
 export function Adote() {
@@ -23,37 +23,39 @@ export function Adote() {
       altImage: "Imagem de adote um cão",
       image: AdoteDog,
       title: "Adote um Cachorro",
-      url: "/adote/cao",
+      type: "dog"
     },
     {
       altImage: "Adote um Gato",
       image: AdoteCat,
       title: "Adote um Gato",
-      url: "/adote/gato",
+      type: "cat"
+
     },
     {
       altImage: "Adote um Peixe",
       image: AdoteFish,
       title: "Adote um Peixe",
-      url: "/adote/peixe",
+      type: "fish"
+
     },
     {
       altImage: "Adote um Réptil",
       image: AdoteReptil,
       title: "Adote um Réptil",
-      url: "/adote/reptil",
+      type: "reptile"
     },
     {
-      altImage: "Adote um  Pássaro",
+      altImage: "Adote um Pássaro",
       image: AdoteBird,
-      title: "Adote um  Pássaro",
-      url: "/adote/passaro",
+      title: "Adote um Pássaro",
+      type: "bird"
     },
     {
       altImage: "Adote um  Roedor",
       image: AdoteRoedor,
       title: "Adote um  Roedor",
-      url: "/adote/roedor",
+      type: "rodent"
     },
   ];
   return (
@@ -70,7 +72,7 @@ export function Adote() {
                 altImage: card.altImage,
                 image: card.image,
                 title: card.title,
-                url: card.url,
+                type: card.type
               };
               return <CardAdote animalInfo={data} key={card.title} />;
             })}
@@ -83,7 +85,7 @@ export function Adote() {
                   altImage: card.altImage,
                   image: card.image,
                   title: card.title,
-                  url: card.url,
+                  type: card.type
                 };
                 return <CardAdote animalInfo={data} isSmall key={card.title} />;
               })}
@@ -95,7 +97,7 @@ export function Adote() {
                   altImage: card.altImage,
                   image: card.image,
                   title: card.title,
-                  url: card.url,
+                  type: card.type
                 };
                 return <CardAdote animalInfo={data} isSmall key={card.title} />;
               })}

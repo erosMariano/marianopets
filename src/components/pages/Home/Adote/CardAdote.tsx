@@ -1,23 +1,33 @@
 import localFont from "next/font/local";
 import Image, { StaticImageData } from "next/image";
-import Link from "next/link";
+import { useRouter } from "next/router";
 const myFont = localFont({ src: "../../fonts/MADE_Gentle.otf" });
 
 interface CardAdote {
   animalInfo: {
     title: string;
-    url: string;
     image: StaticImageData;
     altImage: string;
+    type: string;
   };
   isSmall?: boolean;
 }
 export function CardAdote({
-  animalInfo: { altImage, image, title, url },
+  animalInfo: { altImage, image, title, type },
   isSmall,
 }: CardAdote) {
+  const route = useRouter();
+
+  function handleCardAdote() {
+    localStorage.setItem("tag-pet", type);
+    route.push("/quero-adotar");
+  }
   return (
-    <div className="relative flex items-center justify-center">
+    <div
+      className="relative flex items-center justify-center"
+      data-aos="fade-up"
+      data-aos-duration="1000"
+    >
       <div className="absolute flex items-center flex-col">
         <h3
           className={`${myFont.className} ${
@@ -26,14 +36,14 @@ export function CardAdote({
         >
           {title}
         </h3>
-        <Link
-          href={`${url}`}
+        <button
+          onClick={handleCardAdote}
           className={`transition border rounded border-white font-bold hover:bg-white hover:text-dark-text flex items-center justify-center text-white ${
             isSmall ? "w-40 h-10" : "w-40 h-10 lg:w-52 lg:h-12"
           }`}
         >
           Ver Lista
-        </Link>
+        </button>
       </div>
       <Image src={image} alt={altImage} className="rounded-3xl" />
     </div>

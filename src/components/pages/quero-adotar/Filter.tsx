@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import ButtonFilter from "./ButtonFilter";
-import Image from "next/image";
 
 interface FilterQueroAdotar {
   defineItemActiveFilter: (el: number) => void;
@@ -26,7 +25,8 @@ function FilterQueroAdotar({
 }: FilterQueroAdotar) {
   const [itemActiveFilter, setItemActiveFilter] = useState(0);
 
-  function filterActive(indexElement: number) {
+  // UseCallback para evitar renderizações desnecessárias por conta do useEffect
+  const filterActive = useCallback((indexElement: number) => {
     setListItemFilter((prevState) => {
       const updatedList = prevState.map((item, index) => {
         if (index === indexElement) {
@@ -47,11 +47,29 @@ function FilterQueroAdotar({
     });
 
     setItemActiveFilter(indexElement);
-  }
+    localStorage.removeItem("tag-pet")
+  }, [setListItemFilter]);
 
   useEffect(() => {
-    defineItemActiveFilter(itemActiveFilter);
-  }, [defineItemActiveFilter, itemActiveFilter]);
+    const listTypeAnimals = [
+      "all",
+      "dog",
+      "cat",
+      "bird",
+      "fish",
+      "rodent",
+      "reptile",
+    ];
+    const itemLocalStorage = localStorage.getItem("tag-pet");
+    if (itemLocalStorage) {
+      const indexLocalStorage = listTypeAnimals.findIndex(
+        (el) => el === itemLocalStorage
+      );
+      filterActive(indexLocalStorage);
+    } else {
+      defineItemActiveFilter(itemActiveFilter);
+    }
+  }, [defineItemActiveFilter, filterActive, itemActiveFilter]);
 
   return (
     <div className="flex lg:justify-center items-center gap-8 mb-8 overflow-x-scroll transparent-scrollbar">

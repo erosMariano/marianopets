@@ -8,8 +8,15 @@ import { NossaTarefa } from "@/components/pages/Home/NossaTarefa";
 import { Inter } from "next/font/google";
 const inter = Inter({ subsets: ["latin"] });
 import Head from "next/head";
+import { useEffect } from "react";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 export default function Home() {
+  useEffect(() => {
+    AOS.init();
+  }, []);
+
   return (
     <>
       <Head>
@@ -22,7 +29,7 @@ export default function Home() {
         />
       </Head>
       <Header />
-      <main className={inter.className}>
+      <main className={`overflow-x-hidden ${inter.className}`}>
         <Hero />
         <NosAjudar />
         <NossaTarefa />

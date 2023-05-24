@@ -11,7 +11,7 @@ import Link from "next/link";
 
 export function Hero() {
   return (
-    <section className="mt-10 lg:mt-20">
+    <section className="mt-10 lg:mt-20 overflow-x-hidden lg:overflow-visible">
       <div className="flex max-w-[1312px] mx-auto px-4 gap-20 relative flex-col lg:flex-row h-auto">
         <Image src={PataIcon} alt="" className="absolute -z-10 hidden xl:block  xl:left-[-90px] top-[140px]" />
         <Image src={PataIcon} alt="" className="absolute -z-10 hidden xl:block   xl:left-[-40px] top-[100px]" />
@@ -29,7 +29,7 @@ export function Hero() {
         <Image src={PataIcon} alt="" className="absolute -z-10 hidden xl:block  xl:right-[150px] bottom-9 rotate-[-50deg]" /> 
 
 
-        <div className="flex flex-col flex-1"> 
+        <div className="flex flex-col flex-1" data-aos="fade-right" data-aos-duration="1000"> 
           <h1
             className={`${myFont.className} text-5xl lg:text-8xl text-dark-text mb-6 max-w-[660px]`}
           >
@@ -45,7 +45,7 @@ export function Hero() {
           </Link>
         </div>
 
-        <div className="flex gap-2 justify-center w-auto items-start xl:w-1/3 lg:w-auto">
+        <div className="flex gap-2 justify-center w-auto items-start xl:w-1/3 lg:w-auto" data-aos="fade-left" data-aos-duration="1000">
           <Image src={ImageDog} alt="" quality={100} />
           <Image src={ImageCat} alt="" quality={100} />
         </div>
