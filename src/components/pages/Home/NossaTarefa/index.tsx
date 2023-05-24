@@ -6,7 +6,7 @@ const myFont = localFont({ src: "../../fonts/MADE_Gentle.otf" });
 
 export function NossaTarefa() {
   return (
-    <section className="xl:mt-20">
+    <section className="xl:mt-20" id="como-funciona">
       <div className="flex-col flex xl:flex-row max-w-[1312px] mx-auto px-4 align-cen justify-between gap-11">
         <div className="flex-1">
           <h2 className={`${myFont.className} mb-6 text-4xl text-dark-text`}>

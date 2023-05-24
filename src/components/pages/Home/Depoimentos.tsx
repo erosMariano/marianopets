@@ -6,7 +6,7 @@ import Arrow from "../../../assets/images/icons/arrow-prev.svg";
 import Image from "next/image";
 export function Depoimentos() {
   return (
-    <section className="mt-20">
+    <section className="mt-20" id="depoimentos">
       <div className="max-w-[1312px] mx-auto px-4">
         <h2 className={`${myFont.className} text-4xl mb-10 md:mb-14 text-dark-text`}>
           Depoimentos

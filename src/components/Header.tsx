@@ -39,11 +39,11 @@ export function Header({ authenticated }: PropsTeste) {
   }
 
   async function handleClickInButtonControllerCookies() {
-    if(authenticated){
-      await api.put("/auth/login")
-      await route.push("/login")
-    }else{
-      await route.push("/login")
+    if (authenticated) {
+      await api.put("/auth/login");
+      await route.push("/login");
+    } else {
+      await route.push("/login");
     }
   }
   return (
@@ -53,7 +53,7 @@ export function Header({ authenticated }: PropsTeste) {
       } sticky top-0 py-4 z-10`}
     >
       <div className="flex items-center justify-between w-full max-w-[1312px] mx-auto px-4">
-        <div className="flex items-center gap-10 ">
+        <div className="flex items-center xl:gap-10 ">
           <Link href={"/"}>
             <Image
               src={Logo}
@@ -75,32 +75,48 @@ export function Header({ authenticated }: PropsTeste) {
             </button>
 
             <ul className="flex gap-9 flex-col items-center justify-center w-full px-4 lg:flex-row">
-              <li>
+              <li className="flex flex-col relative group">
                 <Link
-                  href=""
-                  className="font-bold text-base text-dark-blue"
+                  href="/#como-funciona"
+                  className="font-bold text-base text-dark-blue relative after:w-full after:"
                   onClick={() => handleMenuClick()}
                 >
                   Como funciona
                 </Link>
+                <span className="absolute bg-orange-400 w-0 h-[1px] bottom-0 group-hover:w-full transition-all"></span>
               </li>
-              <li>
+
+              <li className="flex flex-col relative group">
                 <Link
-                  href="/quero-adotar"
+                  href="/#adote-pet"
                   className="font-bold text-base text-dark-blue"
                   onClick={() => handleMenuClick()}
                 >
-                  Nosso Pets
+                  Adote um pet
                 </Link>
+                <span className="absolute bg-orange-400 w-0 h-[1px] bottom-0 group-hover:w-full transition-all"></span>
               </li>
-              <li>
+
+              <li className="flex flex-col relative group">
                 <Link
-                  href=""
+                  href="/#depoimentos"
                   className="font-bold text-base text-dark-blue"
                   onClick={() => handleMenuClick()}
                 >
                   Depoimentos
                 </Link>
+                <span className="absolute bg-orange-400 w-0 h-[1px] bottom-0 group-hover:w-full transition-all"></span>
+              </li>
+
+              <li className="flex flex-col relative group">
+                <Link
+                  href="/quero-adotar"
+                  className="font-bold text-base text-dark-blue"
+                  onClick={() => handleMenuClick()}
+                >
+                  Nossos Pets
+                </Link>
+                <span className="absolute bg-orange-400 w-0 h-[1px] bottom-0 group-hover:w-full transition-all"></span>
               </li>
 
               <button
@@ -153,7 +169,7 @@ export function Header({ authenticated }: PropsTeste) {
               </>
             ) : (
               <>
-                Quero doar
+                <span className="w-[95px]">Quero doar</span>
                 <Image
                   src={IconLogin}
                   width={20}

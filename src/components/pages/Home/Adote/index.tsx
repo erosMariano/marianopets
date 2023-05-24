@@ -57,7 +57,7 @@ export function Adote() {
     },
   ];
   return (
-    <section className="mt-20">
+    <section className="mt-20" id="adote-pet">
       <div className="flex max-w-[1312px] mx-auto px-4 flex-col">
         <h2 className={`${myFont.className} text-4xl mb-6 lg:mb-14 text-dark-text`}>
           Adote um pet
