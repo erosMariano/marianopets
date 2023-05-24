@@ -69,6 +69,7 @@ function Animal({ dataAnimal }: AnimalProps) {
       console.log('Conteúdo compartilhado com sucesso!');
     }
   }
+
   return (
     <>
       <Head>
@@ -77,11 +78,11 @@ function Animal({ dataAnimal }: AnimalProps) {
           name="description"
           content="Encontre seu companheiro perfeito para adoção no nosso site de adoção de animais. Temos cães, gatos e outros animais em busca de um lar amoroso."
         />
-
+        
         {/* Meta tags Open Graph (OG) */}
         <meta property="og:title" content={`Mariano Pets - ${dataAnimal.name}`} />
         <meta property="og:description" content="Encontre seu companheiro perfeito para adoção no nosso site de adoção de animais. Temos cães, gatos e outros animais em busca de um lar amoroso." />
-        <meta property="og:image" content={dataAnimal.image[0].downloadUrl[0]} />
+        <meta property="og:image" content={dataAnimal.image[0].downloadUrl} />
         <meta property="og:url" content={`https://marianopets.vercel.app/quero-adotar/${dataAnimal.id}`} />
         <meta property="og:type" content="website" />
       </Head>
