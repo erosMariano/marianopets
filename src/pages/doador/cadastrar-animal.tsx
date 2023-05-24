@@ -244,7 +244,7 @@ function CadastrarAnimal({ people }: PropsFormDoacao) {
   return (
     <>
       <Head>
-        <title>Mariano Pets - Nossos Pets</title>
+        <title>Mariano Pets - Cadastrar animal</title>
         <meta
           name="description"
           content="Encontre seu companheiro perfeito para adoção no nosso site de adoção de animais. Temos cães, gatos e outros animais em busca de um lar amoroso. Visite-nos hoje para encontrar o amigo peludo ideal!"

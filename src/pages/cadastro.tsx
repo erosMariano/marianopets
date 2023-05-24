@@ -93,6 +93,17 @@ function SignUp() {
     <>
       <Head>
         <title>Mariano Pets - Cadastro</title>
+        <meta
+          name="description"
+          content="Encontre seu companheiro perfeito para adoção no nosso site de adoção de animais. Temos cães, gatos e outros animais em busca de um lar amoroso. Visite-nos hoje para encontrar o amigo peludo ideal!"
+        />
+
+        {/* Meta tags Open Graph (OG) */}
+        <meta property="og:title" content={`Mariano Pets - Cadastro`} />
+        <meta property="og:description" content="Encontre seu companheiro perfeito para adoção no nosso site de adoção de animais. Temos cães, gatos e outros animais em busca de um lar amoroso. Visite-nos hoje para encontrar o amigo peludo ideal!" />
+        <meta property="og:image" content='https://marianopets.vercel.app/assets/images/banner-search.jpg' />
+        <meta property="og:url" content={`https://marianopets.vercel.app/cadastro`} />
+        <meta property="og:type" content="website" />
       </Head>
       <ToastContainer />
 

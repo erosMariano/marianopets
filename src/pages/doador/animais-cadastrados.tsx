@@ -86,7 +86,7 @@ function AnimaisCadastrados({ dataAnimal }: AnimalCadastrado) {
     <>
       <ToastContainer />
       <Head>
-        <title>Mariano Pets - Nossos Pets</title>
+        <title>Mariano Pets - Animais cadastrados</title>
         <meta
           name="description"
           content="Encontre seu companheiro perfeito para adoção no nosso site de adoção de animais. Temos cães, gatos e outros animais em busca de um lar amoroso. Visite-nos hoje para encontrar o amigo peludo ideal!"

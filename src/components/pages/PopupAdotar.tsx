@@ -15,7 +15,7 @@ function PopupAdotar({ email, isOpen, phone, setIsOpen }: PopupAdotarProps) {
     <div
       className={`w-full transition-all fixed top-0 left-0 h-screen bg-black/25 px-4 flex items-center justify-center z-20 opacity-0${
         isOpen
-          ? "opacity-1 cursor-pointer pointer-events-auto"
+          ? "opacity-1 cursor-auto pointer-events-auto"
           : " cursor-none pointer-events-none"
       }`}
     >

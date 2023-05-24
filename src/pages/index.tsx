@@ -20,14 +20,20 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>
-          Mariano Pets - Encontre seu companheiro perfeito para adoção
-        </title>
+        <title>Mariano Pets - Encontre seu companheiro perfeito para adoção</title>
         <meta
           name="description"
           content="Encontre seu companheiro perfeito para adoção no nosso site de adoção de animais. Temos cães, gatos e outros animais em busca de um lar amoroso. Visite-nos hoje para encontrar o amigo peludo ideal!"
         />
+
+        {/* Meta tags Open Graph (OG) */}
+        <meta property="og:title" content={`Mariano Pets - Encontre seu companheiro perfeito para adoção`} />
+        <meta property="og:description" content="Encontre seu companheiro perfeito para adoção no nosso site de adoção de animais. Temos cães, gatos e outros animais em busca de um lar amoroso. Visite-nos hoje para encontrar o amigo peludo ideal!" />
+        <meta property="og:image" content='https://marianopets.vercel.app/assets/images/banner-search.jpg' />
+        <meta property="og:url" content={`https://marianopets.vercel.app/`} />
+        <meta property="og:type" content="website" />
       </Head>
+
       <Header />
       <main className={`overflow-x-hidden ${inter.className}`}>
         <Hero />

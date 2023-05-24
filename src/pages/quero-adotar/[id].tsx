@@ -44,8 +44,6 @@ interface AnimalProps {
 }
 
 function Animal({ dataAnimal }: AnimalProps) {
-  const router = useRouter();
-
   const [openModal, setOpenModal] = useState(false);
 
   function changeModal() {
@@ -60,14 +58,33 @@ function Animal({ dataAnimal }: AnimalProps) {
     };
   });
 
+
+  async function handleShareAnimal(){
+    try{
+      await navigator.share({
+        title: `Mariano Pets - ${dataAnimal.name}`,
+        text: `Conheça esse adorável ${dataAnimal.type} para adoção! Venha conhecê-lo e dar um lar amoroso para esse animal.`,
+        url: `https://marianopets.vercel.app/quero-adotar/${dataAnimal.id}`
+      });
+    }catch(error){
+      console.log('Conteúdo compartilhado com sucesso!');
+    }
+  }
   return (
     <>
       <Head>
-        <title>Mariano Pets - {dataAnimal.name ? dataAnimal.name : ""}</title>
+        <title>Mariano Pets - {dataAnimal.name}</title>
         <meta
           name="description"
-          content="Encontre seu companheiro perfeito para adoção no nosso site de adoção de animais. Temos cães, gatos e outros animais em busca de um lar amoroso. Visite-nos hoje para encontrar o amigo peludo ideal!"
+          content="Encontre seu companheiro perfeito para adoção no nosso site de adoção de animais. Temos cães, gatos e outros animais em busca de um lar amoroso."
         />
+
+        {/* Meta tags Open Graph (OG) */}
+        <meta property="og:title" content={`Mariano Pets - ${dataAnimal.name}`} />
+        <meta property="og:description" content="Encontre seu companheiro perfeito para adoção no nosso site de adoção de animais. Temos cães, gatos e outros animais em busca de um lar amoroso." />
+        <meta property="og:image" content={dataAnimal.photos[0]} />
+        <meta property="og:url" content={`https://marianopets.vercel.app/quero-adotar/${dataAnimal.id}`} />
+        <meta property="og:type" content="website" />
       </Head>
       <Header />
       <PopupAdotar
@@ -90,7 +107,7 @@ function Animal({ dataAnimal }: AnimalProps) {
               <h2 className={`${myFont.className} text-dark-text text-4xl`}>
                 {dataAnimal.name}
               </h2>
-              <button>
+              <button onClick={handleShareAnimal}>
                 {" "}
                 <Image
                   src={ShareIcon}

@@ -62,6 +62,17 @@ function SignIn() {
     <>
       <Head>
         <title>Mariano Pets - Login</title>
+        <meta
+          name="description"
+          content="Login Mariano Pets"
+        />
+
+        {/* Meta tags Open Graph (OG) */}
+        <meta property="og:title" content={`Mariano Pets - Login`} />
+        <meta property="og:description" content="Login Mariano Pets" />
+        <meta property="og:image" content='https://marianopets.vercel.app/assets/images/banner-search.jpg' />
+        <meta property="og:url" content={`https://marianopets.vercel.app/login`} />
+        <meta property="og:type" content="website" />
       </Head>
 
       <Header />
