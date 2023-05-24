@@ -12,7 +12,6 @@ import storage from "@/config/firebase.config";
 import { getDownloadURL, ref } from "firebase/storage";
 import { GetStaticPaths, GetStaticProps } from "next";
 import Image from "next/image";
-import { useRouter } from "next/router";
 import { useState } from "react";
 import { prisma } from "../../../lib/prisma";
 import ArrowButton from "../../assets/images/icons/arrow-button.svg";
@@ -82,7 +81,7 @@ function Animal({ dataAnimal }: AnimalProps) {
         {/* Meta tags Open Graph (OG) */}
         <meta property="og:title" content={`Mariano Pets - ${dataAnimal.name}`} />
         <meta property="og:description" content="Encontre seu companheiro perfeito para adoção no nosso site de adoção de animais. Temos cães, gatos e outros animais em busca de um lar amoroso." />
-        <meta property="og:image" content={dataAnimal.photos[0]} />
+        <meta property="og:image" content={dataAnimal.image[0].downloadUrl[0]} />
         <meta property="og:url" content={`https://marianopets.vercel.app/quero-adotar/${dataAnimal.id}`} />
         <meta property="og:type" content="website" />
       </Head>
@@ -204,6 +203,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     filesAnimalsRefs.map(async (path, index) => {
       const fileRef = ref(storage, path);
       const downloadUrl = await getDownloadURL(fileRef);
+      console.log(downloadUrl)
       return { downloadUrl };
     })
   );
