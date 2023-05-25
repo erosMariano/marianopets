@@ -15,6 +15,7 @@ import { GetServerSideProps } from "next";
 import { IncomingMessage } from "http";
 import { checkCookies } from "@/utils/cookieUtils";
 import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Formato inválido de email" }),
@@ -62,21 +63,24 @@ function SignIn() {
     <>
       <Head>
         <title>Mariano Pets - Login</title>
-        <meta
-          name="description"
-          content="Login Mariano Pets"
-        />
+        <meta name="description" content="Login Mariano Pets" />
 
         {/* Meta tags Open Graph (OG) */}
         <meta property="og:title" content={`Mariano Pets - Login`} />
         <meta property="og:description" content="Login Mariano Pets" />
-        <meta property="og:image" content='https://marianopets.vercel.app/assets/images/banner-search.jpg' />
-        <meta property="og:url" content={`https://marianopets.vercel.app/login`} />
+        <meta
+          property="og:image"
+          content="https://marianopets.vercel.app/assets/images/banner-search.jpg"
+        />
+        <meta
+          property="og:url"
+          content={`https://marianopets.vercel.app/login`}
+        />
         <meta property="og:type" content="website" />
       </Head>
 
       <Header />
-      <main className="max-w-[1312px] mx-auto px-4 mt-20 pb-20 w-full">
+      <main className="max-w-[1312px] mx-auto px-4 mt-20 pb-20 w-full flex-grow">
         <div className="bg-white w-full rounded-2xl shadow-sm flex overflow-hidden">
           <div className="w-2/5 h-[456px]  lg:flex hidden">
             <Image
@@ -150,6 +154,8 @@ function SignIn() {
           </div>
         </div>
       </main>
+
+      <Footer />
     </>
   );
 }

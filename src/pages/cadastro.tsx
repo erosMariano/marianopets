@@ -17,6 +17,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { Header } from "@/components/Header";
 import { myFont } from "@/components/pages/Home/Hero";
 import ImageDogs from "../assets/images/beagles-filhotes-bocejando.jpg";
+import { Footer } from "@/components/Footer";
 
 //remove os caracteres que não são números
 const phoneSchema = z
@@ -108,7 +109,7 @@ function SignUp() {
       <ToastContainer />
 
       <Header />
-      <main className="max-w-[1312px] mx-auto px-4 mt-20 pb-20 w-full">
+      <main className="max-w-[1312px] mx-auto px-4 mt-20 pb-20 w-full flex-grow">
         <div className="bg-white w-full rounded-2xl shadow-sm flex lg:flex-row overflow-hidden">
           <div className="w-[500px]  h-[640px] lg:flex hidden">
             <Image
@@ -213,6 +214,8 @@ function SignUp() {
           </div>
         </div>
       </main>
+
+      <Footer />
     </>
   );
 }
