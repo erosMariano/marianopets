@@ -12,14 +12,6 @@ import { format, formatISO } from "date-fns";
 const inter = Inter({ subsets: ["latin"] });
 
 interface PropsFormDoacao {
-  people: {
-    id: string;
-    email: string;
-    name: string;
-    phone: string;
-  };
-}
-interface PropsFormDoacao {
   id: string;
   email: string;
   name: string;
@@ -40,11 +32,28 @@ interface AnimalCadastrado {
     type: string;
     tutorId: string;
   }[];
+
+  people: {
+    id: string;
+    email: string;
+    name: string;
+    phone: string;
+  };
 }
 
+function DoadorHome({ dataAnimal, people }: AnimalCadastrado) {
+  function convertFirstLetter(name: string) {
+    const newString = String(name)
+      .toLowerCase()
+      .split(" ")
+      .map((elText) => {
+        return elText.charAt(0).toUpperCase() + elText.slice(1);
+      })
+      .join(" ");
 
-function DoadorHome({ people }: PropsFormDoacao) {
-  
+    return newString;
+  }
+
   return (
     <>
       <Head>
@@ -54,30 +63,30 @@ function DoadorHome({ people }: PropsFormDoacao) {
           content="Encontre seu companheiro perfeito para adoção no nosso site de adoção de animais. Temos cães, gatos e outros animais em busca de um lar amoroso. Visite-nos hoje para encontrar o amigo peludo ideal!"
         />
       </Head>
-        <main
-          className={`${inter.className} flex flex-grow mt-10 lg:mt-20 justify-between w-full max-w-[1312px] mx-auto px-4 gap-6`}
-        >
-          <Sidebar activeMenu="home" />
+      <main
+        className={`${inter.className} flex flex-grow mt-10 lg:mt-20 justify-between w-full max-w-[1312px] mx-auto px-4 gap-6`}
+      >
+        <Sidebar activeMenu="home" />
 
-          <div className="w-full">
-            <div className="flex flex-col">
-              <span className={`${myFont.className} text-dark-text text-2xl`}>
-                Olá, Eros dos Santos Mariano
-              </span>
-              <span className="text-light-text font-medium">
-                Bem-vindo ao nosso Dashboard de Cadastro de Animais para Doação!
-              </span>
-            </div>
-
-            <Link
-              href="/doador/animais-cadastrados"
-              className="mt-9 w-full h-48 text-2xl flex items-center justify-center text-center font-semibold text-gray-800 bg-white shadow-sm rounded-3xl"
-            >
-              04 Animais cadastrados
-            </Link>
+        <div className="w-full">
+          <div className="flex flex-col">
+            <span className={`${myFont.className} text-dark-text text-2xl`}>
+              Olá, <span>{convertFirstLetter(people.name)}</span>
+            </span>
+            <span className="text-light-text font-medium">
+              Bem-vindo ao nosso Dashboard de Cadastro de Animais para Doação!
+            </span>
           </div>
-        </main>
-        <Footer />
+
+          <Link
+            href="/doador/animais-cadastrados"
+            className="mt-9 w-full h-48 text-2xl flex items-center justify-center text-center font-semibold text-gray-800 bg-white shadow-sm rounded-3xl"
+          >
+            {String(dataAnimal.length).padStart(2, "0")} Animais cadastrados
+          </Link>
+        </div>
+      </main>
+      <Footer />
     </>
   );
 }
@@ -127,6 +136,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: {
       dataAnimal: dataAnimal,
+      people: people,
     },
   };
 };

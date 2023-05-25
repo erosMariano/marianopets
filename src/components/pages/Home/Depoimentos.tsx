@@ -45,7 +45,7 @@ export function Depoimentos() {
   }
 
   return (
-    <section className="mt-20" id="depoimentos">
+    <section className="mt-20 pb-3" id="depoimentos">
       <div className="max-w-[1312px] mx-auto px-4">
         <h2
           className={`${myFont.className} text-4xl mb-10 md:mb-14 text-dark-text`}
