@@ -60,11 +60,11 @@ function CardAnimal({
   return (
     <div
       className={`${
-        heightCard ? "max-h-[64px] overflow-hidden" : "max-h-full"
+        heightCard ? "max-h-[106px] lg:max-h-[64px] overflow-hidden" : "max-h-full"
       } shadow-sm bg-white p-3 w-full rounded-lg transition-all `}
       key={id}
     >
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col gap-4 lg:gap-0 lg:flex-row justify-between items-start lg:items-center">
         <h2 className="text-slate-700">
           <span className="font-semibold mr-2"> Nome do PET:</span>
           {name}

@@ -93,11 +93,11 @@ function AnimaisCadastrados({ dataAnimal }: AnimalCadastrado) {
         />
       </Head>
       <main
-        className={`${inter.className} flex flex-grow mt-10 lg:mt-20 justify-between w-full max-w-[1312px] mx-auto px-4 gap-6`}
+        className={`${inter.className} mt-20 flex flex-grow gap-0 lg:mt-20 justify-between w-full max-w-[1312px] mx-auto px-4 lg:gap-6`}
       >
         <Sidebar activeMenu="animais-cadastrados" />
         <div className="w-full">
-          <div className="flex gap-3 items-start flex-col">
+          <div className="flex gap-3 items-start flex-col mt-5 lg:mt-0">
             {listAnimal.length >= 1 ? (
               listAnimal.map(({ id, name, city, details, photos }) => (
                 <CardAnimal
