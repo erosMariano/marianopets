@@ -5,11 +5,6 @@ import { useRouter } from "next/router";
 import { Trash, Pen, WarningCircle } from "phosphor-react";
 import React, { useEffect, useState } from "react";
 
-interface handleDeletePetProps {
-  id: string;
-  deleteId: boolean;
-}
-
 interface CardAnimalProps {
   name: string;
   id: string;
