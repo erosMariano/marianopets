@@ -76,13 +76,6 @@ Renomeie o arquivo `.env.example` para `.env` e crie suas próprias variáveis d
 - [x] Lista dos Animais cadastrados
 - [x] Cadastrar novos animais
 
-### Futuras Features do Projeto até o momento
-
-- [ ] Editar Animal cadastrado
-- [ ] Criar perfil do usuário
-- [ ] Apagar perfil do usuário
-- [ ] Modificar perfil do usuário
-- [ ] Testes unitários
 
 <br>
 
