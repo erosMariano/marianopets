@@ -120,6 +120,7 @@ export function Header({ authenticated }: PropsTeste) {
               </li>
 
               <button
+                data-testid="buttonQueroDoarDesk"
                 onClick={() => handleClickInButtonControllerCookies()}
                 className="flex items-center bg-orange-400 px-4 py-2 transition-all lg:px-6 lg:text-base text-sm hover:bg-orange-500 lg:py-3 gap-3 rounded-full text-white font-bold max-w-xs w-full justify-center lg:hidden"
               >
@@ -152,6 +153,7 @@ export function Header({ authenticated }: PropsTeste) {
         </div>
 
         <button
+          data-testid="buttonQueroDoarMobile"
           onClick={() => handleClickInButtonControllerCookies()}
           className="hidden lg:flex items-center bg-orange-400 hover:bg-orange-500 transition-all px-4 py-2 lg:px-6 lg:text-base text-sm lg:py-3 gap-3 rounded-full text-white font-bold"
         >
