@@ -76,6 +76,9 @@ Renomeie o arquivo `.env.example` para `.env` e crie suas próprias variáveis d
 - [x] Lista dos Animais cadastrados
 - [x] Cadastrar novos animais
 
+### Em andamento...
+- [ ] Testes unitários
+
 
 <br>
 
