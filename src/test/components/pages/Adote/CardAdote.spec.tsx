@@ -1,6 +1,6 @@
 import { screen, render } from "@testing-library/react";
-import { CardAdote } from "./CardAdote";
 import AdoteDog from "../../../../assets/images/adote-cao.png";
+import { CardAdote } from "@/components/pages/Home/Adote/CardAdote";
 
 const propsCardAdote = {
   animalInfo: {
