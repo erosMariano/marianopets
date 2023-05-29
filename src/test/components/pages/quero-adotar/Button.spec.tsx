@@ -1,7 +1,7 @@
 import ButtonFilter from "@/components/pages/quero-adotar/ButtonFilter";
 import { screen, render, fireEvent } from "@testing-library/react";
 
-describe("Button component", () => {
+describe("Button Filter component", () => {
   const activeItemFunc = jest.fn();
   it("render correctly", () => {
     render(
@@ -54,7 +54,6 @@ describe("Button component", () => {
         indexElement={0}
       />
     );
-    screen.debug()
     expect(screen.getByText("Cachorro")).toHaveClass("bg-transparent")
   });
 });
