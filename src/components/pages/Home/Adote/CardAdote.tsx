@@ -6,7 +6,7 @@ const myFont = localFont({ src: "../../fonts/MADE_Gentle.otf" });
 interface CardAdote {
   animalInfo: {
     title: string;
-    image: StaticImageData;
+    image: StaticImageData | string;
     altImage: string;
     type: string;
   };
