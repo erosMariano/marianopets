@@ -1,6 +1,6 @@
 import { Header } from "@/components/Header";
 import { screen, render, fireEvent, waitFor } from "@testing-library/react";
-import { api } from "../../lib/axios";
+import { api } from "../../../lib/axios";
 
 jest.mock("next/router", () => ({
   useRouter: jest.fn().mockReturnValue({

@@ -1,4 +1,4 @@
-import Image, { StaticImageData } from "next/image";
+import Image from "next/image";
 import React, { useState } from "react";
 
 interface CarouselProps {
@@ -20,7 +20,7 @@ const Carousel = ({ slides }: CarouselProps) => {
       {/* Slide atual em destaque */}
       <Image
         src={slides[currentSlide].photoAnimal}
-        alt={`Slide ${slides[currentSlide].id}`}
+        alt={`Slide ${slides[currentSlide].id} small`}
         className="w-full object-cover h-[300px] rounded-2xl"
         blurDataURL={slides[currentSlide].photoAnimal}
         width={300}
